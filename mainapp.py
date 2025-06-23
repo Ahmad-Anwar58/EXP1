@@ -14,12 +14,12 @@ st.set_page_config(page_title="CropIQ – Intelligent Crop Yield Optimizer", lay
 
 # === Inject Background Image ===
 @st.cache_data
-def get_base64_image(image_path):
+def get_base64_image(image_path, version=2):  # version change breaks cache
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
 img_path = "appbackground.jpg"  # Ensure this file exists in the same directory
-img_base64 = get_base64_image(img_path)
+img_base64 = get_base64_image(img_path, version=2)
 
 st.markdown(
     f"""

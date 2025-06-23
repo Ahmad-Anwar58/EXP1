@@ -78,8 +78,10 @@ section = st.sidebar.radio("📂 Choose Module", [
     "🌾 Yield Predictor",
     "💧 Irrigation Forecast",
     "🧪 Pesticide Estimator",
-    "💰 ROI Calculator"
+    "💰 ROI Calculator",
+    "💬 AgriTech Chatbot 🤖"
 ])
+
 # 1. Dashboard
 if section == "📈 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
@@ -251,17 +253,26 @@ def get_chatbot_response(user_input):
     return "🤖 Sorry, I couldn't find an answer to that question."
 
 # Sidebar button to toggle chatbot
-st.sidebar.markdown("---")
-if st.sidebar.button("💬 Open Chatbot"):
-    st.session_state['chat'] = True
-
-# Chatbot UI
-if st.session_state.get('chat', False):
+elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 Smart AgriTech Chatbot")
     st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")
+
+    import json
+    @st.cache_data
+    def load_faq():
+        with open("faq.json", "r") as f:
+            return json.load(f)
+    faq_data = load_faq()
+
+    def get_chatbot_response(user_input):
+        for item in faq_data:
+            if item['question'].lower() in user_input.lower():
+                return item['answer']
+        return "🤖 Sorry, I couldn't find an answer to that question."
 
     user_message = st.text_input("You:", key="user_input")
     if user_message:
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
+
 

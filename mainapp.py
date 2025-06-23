@@ -1,5 +1,3 @@
-# smart_agriculture_app.py
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -9,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
 import plotly.express as px
 import base64
+import streamlit.components.v1 as components
 
 # Set modern page config
 st.set_page_config(page_title="CropIQ – Intelligent Crop Yield Optimizer", layout="wide")
@@ -75,13 +74,12 @@ model.fit(X, y)
 # Sidebar Navigation
 st.sidebar.title("🌱 Smart AgriTech")
 section = st.sidebar.radio("📂 Choose Module", [
-    "📈 Dashboard",
+    "📊 Dashboard",
     "🌾 Yield Predictor",
     "💧 Irrigation Forecast",
     "🧪 Pesticide Estimator",
     "💰 ROI Calculator"
 ])
-
 # 1. Dashboard
 if section == "📈 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
@@ -233,3 +231,45 @@ elif section == "💰 ROI Calculator":
     st.write(f"**Total Cost:** PKR {cost * acres:,.0f}")
     st.write(f"**Total Investment:** PKR {invest * acres:,.0f}")
     st.write(f"**Total Profit:** PKR {profit * acres:,.0f}")
+
+components.html("""
+<style>
+.chatbot-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 16px;
+    border-radius: 50%;
+    font-size: 24px;
+    z-index: 10000;
+    cursor: pointer;
+}
+
+.chatbot-frame {
+    position: fixed;
+    bottom: 90px;
+    right: 25px;
+    width: 400px;
+    height: 500px;
+    border: none;
+    border-radius: 10px;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+</style>
+
+<button class="chatbot-button" onclick="toggleChat()">💬</button>
+<iframe id="chatbot-frame" class="chatbot-frame" src="http://localhost:8502"></iframe>
+
+<script>
+function toggleChat() {
+    var frame = document.getElementById("chatbot-frame");
+    frame.style.display = (frame.style.display === "none") ? "block" : "none";
+}
+document.getElementById("chatbot-frame").style.display = "none";
+</script>
+""", height=600)

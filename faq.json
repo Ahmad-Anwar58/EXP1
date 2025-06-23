@@ -1,0 +1,162 @@
+[
+  {
+    "question": "How does soil moisture affect my crop yield?",
+    "answer": "Higher soil moisture supports better crop growth, but too much can cause root rot. Keep it between 30% to 50%."
+  },
+  {
+    "question": "What is the ideal soil temperature for planting?",
+    "answer": "Most crops grow well when soil temperature is between 15°C and 25°C."
+  },
+  {
+    "question": "How can I improve soil health index?",
+    "answer": "Use organic fertilizers, crop rotation, and avoid over-irrigation."
+  },
+  {
+    "question": "Why is my soil health index low?",
+    "answer": "This may be due to overuse of chemicals, poor drainage, or nutrient imbalance."
+  },
+  {
+    "question": "What is the role of soil health index in farming?",
+    "answer": "It reflects soil fertility. Higher index = healthier soil = better crops."
+  },
+  {
+    "question": "When should I irrigate my field?",
+    "answer": "Irrigate when soil moisture drops below 30%. Monitor using sensors or manual methods."
+  },
+  {
+    "question": "What is irrigation efficiency?",
+    "answer": "It indicates how effectively your irrigation water is used. Higher = better."
+  },
+  {
+    "question": "How can I improve irrigation efficiency?",
+    "answer": "Use drip irrigation, fix leaks, and water during cool hours."
+  },
+  {
+    "question": "How does rainfall affect irrigation needs?",
+    "answer": "More rainfall means you can irrigate less, saving water and costs."
+  },
+  {
+    "question": "Why is my irrigation efficiency low?",
+    "answer": "Causes may include runoff, overwatering, evaporation, or poor scheduling."
+  },
+  {
+    "question": "How much fertilizer should I use?",
+    "answer": "Apply according to crop requirements and soil tests. Avoid overuse."
+  },
+  {
+    "question": "What does high fertilizer usage indicate?",
+    "answer": "It may suggest poor soil health or excessive application."
+  },
+  {
+    "question": "How can I reduce fertilizer usage?",
+    "answer": "Use compost, organic inputs, and soil testing before application."
+  },
+  {
+    "question": "When should I apply pesticides?",
+    "answer": "Only when pest risk is high or damage is visible."
+  },
+  {
+    "question": "What is a safe pesticide usage level?",
+    "answer": "Ideally below 1-2 kg per acre, depending on the crop and pest."
+  },
+  {
+    "question": "What does pest infestation risk mean?",
+    "answer": "It predicts how likely pests are to harm your crops. >60% = high risk."
+  },
+  {
+    "question": "How do I reduce pest risk?",
+    "answer": "Use clean fields, crop rotation, natural predators, or approved pesticides."
+  },
+  {
+    "question": "What should I do if pest risk is high?",
+    "answer": "Apply targeted pest control measures and inspect regularly."
+  },
+  {
+    "question": "How do pests affect yield?",
+    "answer": "They damage crops and reduce plant growth, lowering final yield."
+  },
+  {
+    "question": "Can weather increase pest risk?",
+    "answer": "Yes. Warm and humid conditions boost pest activity."
+  },
+  {
+    "question": "How is crop yield prediction calculated?",
+    "answer": "Based on real-time sensor data like soil, weather, and inputs."
+  },
+  {
+    "question": "Why is my crop yield low?",
+    "answer": "Common reasons: poor soil, pests, over/under irrigation, weather."
+  },
+  {
+    "question": "How can I increase crop yield?",
+    "answer": "Use quality seeds, manage water, fertilize well, and control pests."
+  },
+  {
+    "question": "Is the yield prediction accurate?",
+    "answer": "It’s an estimate from data. It's useful but not guaranteed."
+  },
+  {
+    "question": "What is a good crop yield in Pakistan?",
+    "answer": "For wheat, 35-45 maunds per acre is considered good."
+  },
+  {
+    "question": "How does wind speed affect crops?",
+    "answer": "Strong winds can damage crops or increase water loss."
+  },
+  {
+    "question": "Should I water crops during rainfall?",
+    "answer": "No. Let rainfall irrigate to avoid overwatering."
+  },
+  {
+    "question": "What to do during heavy rain?",
+    "answer": "Ensure proper drainage to prevent flooding and diseases."
+  },
+  {
+    "question": "How to protect crops in hot weather?",
+    "answer": "Use mulching, shaded nets, and water early morning or late evening."
+  },
+  {
+    "question": "What is ideal weather for crops?",
+    "answer": "20–30°C, moist soil, low wind — ideal for most Pakistani crops."
+  },
+  {
+    "question": "How do I calculate ROI in farming?",
+    "answer": "ROI = (Profit ÷ Cost) × 100. Track expenses and earnings."
+  },
+  {
+    "question": "What is a good ROI in agriculture?",
+    "answer": "A 30–50% ROI is generally profitable in small farms."
+  },
+  {
+    "question": "How to increase ROI?",
+    "answer": "Use efficient inputs, reduce waste, and time market entry well."
+  },
+  {
+    "question": "Why should I use sensor-based farming?",
+    "answer": "It gives data-driven decisions, improves yield, and reduces input cost."
+  },
+  {
+    "question": "Can I trust chatbot answers?",
+    "answer": "Yes. It's based on your farm's latest data and expert logic."
+  },
+  {
+    "question": "How does this app help farmers?",
+    "answer": "It gives personalized advice, monitors sensors, and boosts profit."
+  },
+  {
+    "question": "Can I use this app offline?",
+    "answer": "Yes, if your data files are stored locally on the device."
+  },
+  {
+    "question": "How often should I upload new sensor data?",
+    "answer": "At least once a day. Especially in active growing stages."
+  },
+  {
+    "question": "Can I share my data with experts?",
+    "answer": "Yes, export the Excel file and send it via WhatsApp or email."
+  },
+  {
+    "question": "How can I ask this bot farming questions?",
+    "answer": "Just type your question. It understands Urdu & English."
+  }
+]

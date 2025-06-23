@@ -1,0 +1,26 @@
+[
+    {
+        "question": "What crops are suitable for dryland farming?",
+        "answer": "Dryland farming is best suited for crops that are drought-resistant like sorghum, millet, and some varieties of wheat."
+    },
+    {
+        "question": "How can I improve soil fertility naturally?",
+        "answer": "You can improve soil fertility by using compost, practicing crop rotation, and planting cover crops like legumes."
+    },
+    {
+        "question": "When should I irrigate my crops?",
+        "answer": "If soil moisture is below 40% and there is no rainfall, it's time to irrigate your crops."
+    },
+    {
+        "question": "How do I calculate ROI for my crops?",
+        "answer": "ROI = (Profit / Total Investment) x 100. Profit is Revenue minus Cost. Revenue = Yield x Market Price."
+    },
+    {
+        "question": "What are common signs of pest infestation?",
+        "answer": "Look for chewed leaves, discoloration, wilting, or visible pests like aphids and caterpillars."
+    },
+    {
+        "question": "How can I protect crops from frost?",
+        "answer": "Use frost blankets or irrigation to form protective ice, and avoid planting frost-sensitive crops in colder months."
+    }
+]

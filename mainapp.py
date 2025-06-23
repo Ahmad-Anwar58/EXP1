@@ -81,7 +81,6 @@ section = st.sidebar.radio("📂 Choose Module", [
     "💰 ROI Calculator",
     "💬 AgriTech Chatbot 🤖"
 ])
-
 # 1. Dashboard
 if section == "📈 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
@@ -234,34 +233,17 @@ elif section == "💰 ROI Calculator":
     st.write(f"**Total Investment:** PKR {invest * acres:,.0f}")
     st.write(f"**Total Profit:** PKR {profit * acres:,.0f}")
 
-# === Chatbot (FAQ-Based) ===
-import json
-
-# Load chatbot FAQ knowledge
-@st.cache_data
-def load_faq():
-    with open("faq.json", "r") as f:
-        return json.load(f)
-
-faq_data = load_faq()
-
-def get_chatbot_response(user_input):
-    # Simple matching (can be enhanced later with NLP or fuzzy matching)
-    for item in faq_data:
-        if item['question'].lower() in user_input.lower():
-            return item['answer']
-    return "🤖 Sorry, I couldn't find an answer to that question."
-
-# Sidebar button to toggle chatbot
 elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 Smart AgriTech Chatbot")
     st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")
 
     import json
+
     @st.cache_data
     def load_faq():
         with open("faq.json", "r") as f:
             return json.load(f)
+
     faq_data = load_faq()
 
     def get_chatbot_response(user_input):
@@ -274,5 +256,6 @@ elif section == "💬 AgriTech Chatbot 🤖":
     if user_message:
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
+
 
 

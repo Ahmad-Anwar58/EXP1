@@ -232,44 +232,36 @@ elif section == "💰 ROI Calculator":
     st.write(f"**Total Investment:** PKR {invest * acres:,.0f}")
     st.write(f"**Total Profit:** PKR {profit * acres:,.0f}")
 
-components.html("""
-<style>
-.chatbot-button {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background-color: #008CBA;
-    border: none;
-    color: white;
-    padding: 16px;
-    border-radius: 50%;
-    font-size: 24px;
-    z-index: 10000;
-    cursor: pointer;
-}
+# === Chatbot (FAQ-Based) ===
+import json
 
-.chatbot-frame {
-    position: fixed;
-    bottom: 90px;
-    right: 25px;
-    width: 400px;
-    height: 500px;
-    border: none;
-    border-radius: 10px;
-    display: none;
-    z-index: 9999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-</style>
+# Load chatbot FAQ knowledge
+@st.cache_data
+def load_faq():
+    with open("faq.json", "r") as f:
+        return json.load(f)
 
-<button class="chatbot-button" onclick="toggleChat()">💬</button>
-<iframe id="chatbot-frame" class="chatbot-frame" src="http://localhost:8502"></iframe>
+faq_data = load_faq()
 
-<script>
-function toggleChat() {
-    var frame = document.getElementById("chatbot-frame");
-    frame.style.display = (frame.style.display === "none") ? "block" : "none";
-}
-document.getElementById("chatbot-frame").style.display = "none";
-</script>
-""", height=600)
+def get_chatbot_response(user_input):
+    # Simple matching (can be enhanced later with NLP or fuzzy matching)
+    for item in faq_data:
+        if item['question'].lower() in user_input.lower():
+            return item['answer']
+    return "🤖 Sorry, I couldn't find an answer to that question."
+
+# Sidebar button to toggle chatbot
+st.sidebar.markdown("---")
+if st.sidebar.button("💬 Open Chatbot"):
+    st.session_state['chat'] = True
+
+# Chatbot UI
+if st.session_state.get('chat', False):
+    st.title("🤖 Smart AgriTech Chatbot")
+    st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")
+
+    user_message = st.text_input("You:", key="user_input")
+    if user_message:
+        reply = get_chatbot_response(user_message)
+        st.markdown(f"**Bot:** {reply}")
+

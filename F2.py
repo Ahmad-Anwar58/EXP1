@@ -197,77 +197,63 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Home (Welcome Screen)
-if section == "🏠 Home":
-    st.markdown(
-        """
-        <!-- Google Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
 
-        <style>
-        .home-header {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 80px;
-            font-weight: 700;
-            font-style: italic;
-            margin-bottom: 1px;  /* ↓ spacing after title */
-            margin-top: 20px;
-            color: Black;
-        }
-        .home-subtitle {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            font-style: italic;
-            margin-top: 0;  /* ↑ spacing before subtitle */
-            margin-bottom: 30px;
-            color: Black;
-        }
-        .info-box {
-            background-color: rgba(255, 255, 255, 0.85);
-            color: black;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-            margin: 20px 0;
-        }
-        </style>
+st.markdown("""
+    <style>
+    .info-box {
+        background-color: rgba(255, 255, 255, 0.85);
+        color: black;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        margin-bottom: 15px;
+        height: 100%;
+    }
 
-        <div style='text-align: center; padding-top: 20px;'>
-            <div class='home-header'>Crop IQ</div>
-            <div class='home-subtitle'>Your Digital Agronomy Partner.</div>
-        </div>
+    .contact-box {
+        background-color: rgba(255, 255, 255, 0.85);
+        color: black;
+        padding: 20px 30px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+        margin-top: 10px;
+        font-weight: 600;
+        font-size: 16px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
+# Two side-by-side boxes
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
         <div class='info-box'>
             <h3>About Us</h3>
             <p>
-                Crop IQ is a smart agriculture assistant designed to help farmers make data-driven decisions.
-                From predicting crop yield and irrigation schedules to pesticide planning and ROI calculation,
-                our tools put precision farming in your hands. With interactive dashboards and a built-in chatbot,
-                Crop IQ simplifies farming for better productivity and profit.
+                Crop IQ is a smart agriculture assistant that helps farmers make data-driven decisions.
+                It predicts yield, irrigation schedules, pesticide needs, and ROI—all in one place.
             </p>
         </div>
+    """, unsafe_allow_html=True)
 
+with col2:
+    st.markdown("""
         <div class='info-box'>
             <h3>How It Works</h3>
             <p>
-                Crop IQ uses your farm’s data—like soil, weather, and crop type—to predict yield, irrigation needs,
-                and pesticide schedules using AI models. It calculates your expected Return on Investment (ROI) and
-                displays everything through simple, visual dashboards.
+                Using AI and your farm data (soil, weather, crop type), Crop IQ models agricultural predictions 
+                and shows results through visual dashboards and tools.
             </p>
         </div>
+    """, unsafe_allow_html=True)
 
-        <div class='info-box'>
-            <h3>Contact Info</h3>
-            <p>
-                developercropiq@gmail.com<br>
-                +923011063405<br>
-                Wapda Town, Lahore, Pakistan<br>
-                Postal Add: 058002
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+# Full-width Contact Info box
+st.markdown("""
+    <div class='contact-box'>
+        📧 developercropiq@gmail.com  📞 +92 301 1063405  📍 Wapda Town, Lahore, Pakistan  📬 Postal Code: 058002
+    </div>
+""", unsafe_allow_html=True)
 
 
 # 1. Dashboard

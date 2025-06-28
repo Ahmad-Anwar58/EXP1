@@ -14,7 +14,6 @@ import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Crop IQ", layout="wide")
 
-# ===== SIDEBAR =====
 with st.sidebar:
     st.title("🌱 Crop IQ")
 
@@ -28,42 +27,44 @@ with st.sidebar:
         "💬 AgriTech Chatbot 🤖"
     ]
 
-    if "selected_module" not in st.session_state:
-        st.session_state.selected_module = "🏠 Home"
+    section = st.radio("📂 Choose Module", menu_items, index=0)
 
-    st.markdown("""
+    st.markdown(
+        """
         <style>
-        .menu-button {
+        /* Hide default radio button circle */
+        div[role="radiogroup"] > label > div[role="presentation"] > div:first-child {
+            display: none;
+        }
+
+        /* Style each label as a rounded button */
+        div[role="radiogroup"] > label {
             background-color: #f0f2f6;
             border-radius: 15px;
             padding: 12px 20px;
             margin-bottom: 10px;
-            cursor: pointer;
             font-weight: 600;
             font-size: 16px;
             color: #111;
-            transition: background-color 0.3s ease;
+            cursor: pointer;
             user-select: none;
-            text-align: center;
+            transition: background-color 0.3s ease;
         }
-        .menu-button:hover {
+        div[role="radiogroup"] > label:hover {
             background-color: #d1d9ff;
         }
-        .menu-button.selected {
+
+        /* Style the checked/selected option */
+        div[role="radiogroup"] > label[aria-checked="true"] {
             background-color: #4a90e2;
             color: white;
             font-weight: 700;
         }
         </style>
-    """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
 
-    for item in menu_items:
-        selected_class = "selected" if st.session_state.selected_module == item else ""
-        if st.button(item, key=item):
-            st.session_state.selected_module = item
-        st.markdown(f"<div class='menu-button {selected_class}'>{item}</div>", unsafe_allow_html=True)
-
-section = st.session_state.selected_module
 
 # === Inject Background Image ===
 @st.cache_data

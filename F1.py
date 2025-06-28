@@ -33,7 +33,7 @@ st.markdown(
         background-position: center;
     }}
     .main .block-container {{
-        background-color: rgba(255, 255, 255, 0.88);
+        background-color: Black;
         padding: 2rem;
         border-radius: 10px;
     }}

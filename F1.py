@@ -89,9 +89,9 @@ section = st.sidebar.radio("📂 Choose Module", [
 if section == "🏠 Home":
     st.markdown(
         """
-        <div style='text-align: center; padding-top: 100px;'>
-            <h1 style='font-size: 60px; font-weight: bold;'>Crop IQ</h1>
-            <p style='font-size: 24px;'>Your Digital Agronomy Partner.</p>
+        <div style='text-align: center; padding-top: 40px; color: white;'>
+            <h1 style='font-size: 80px; font-weight: bold; margin-bottom: 10px;'>Crop IQ</h1>
+            <p style='font-size: 32px; margin-top: 0;'>Your Digital Agronomy Partner.</p>
         </div>
         """,
         unsafe_allow_html=True

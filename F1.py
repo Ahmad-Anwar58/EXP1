@@ -1,16 +1,16 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import plotly.express as px
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from datetime import datetime
-import plotly.express as px
 import base64
+import os
+import json
 import streamlit.components.v1 as components
 
-# Set modern page config
-import streamlit as st
 
 # -------- Page Config --------
 st.set_page_config(page_title="Crop IQ", layout="wide")

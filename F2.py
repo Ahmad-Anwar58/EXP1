@@ -129,17 +129,21 @@ model.fit(X, y)
 
 # Sidebar Navigation
 with st.sidebar:
-    # Custom large title
+    # Big, bold app title
     st.markdown("""
-        <div style='font-size: 36px; font-weight: 900; color: black; margin-bottom: 20px;'>
+        <div style='font-size: 36px; font-weight: 900; color: black; margin-bottom: 10px;'>
             🌱 Crop IQ
         </div>
     """, unsafe_allow_html=True)
 
-    # Styled label for module selection
-    st.markdown("<div style='font-weight: 700; font-size: 17px; color: #000;'>📂 Choose Module</div>", unsafe_allow_html=True)
+    # Custom label for module section
+    st.markdown("""
+        <div style='font-weight: 700; font-size: 17px; color: black; margin-bottom: 2px; margin-top: -10px;'>
+            📂 Choose Module
+        </div>
+    """, unsafe_allow_html=True)
 
-    # Module selector (hide default label)
+    # Radio buttons for module selection (no default label)
     menu_items = [
         "🏠 Home",
         "🌾 Yield Predictor",
@@ -151,17 +155,25 @@ with st.sidebar:
     ]
     section = st.radio("", menu_items, index=0)
 
-    # CSS styling for options
+    # CSS to style and reduce space between buttons
     st.markdown("""
         <style>
+        /* Tighter space above button group */
+        div[role="radiogroup"] {
+            margin-top: -10px;
+        }
+
+        /* Hide default radio circle */
         div[role="radiogroup"] > label > div[role="presentation"] > div:first-child {
             display: none;
         }
+
+        /* Button style for each label */
         div[role="radiogroup"] > label {
             background-color: #f0f2f6;
             border-radius: 15px;
             padding: 12px 20px;
-            margin-bottom: 10px;
+            margin-bottom: 4px;  /* 🔧 This controls space between buttons */
             font-weight: 600;
             font-size: 16px;
             color: #111;
@@ -169,9 +181,13 @@ with st.sidebar:
             user-select: none;
             transition: background-color 0.3s ease;
         }
+
+        /* Hover effect */
         div[role="radiogroup"] > label:hover {
             background-color: #d1d9ff;
         }
+
+        /* Active/selected button */
         div[role="radiogroup"] > label[aria-checked="true"] {
             background-color: #4a90e2;
             color: white;
@@ -179,7 +195,6 @@ with st.sidebar:
         }
         </style>
     """, unsafe_allow_html=True)
-
 
 # Home (Welcome Screen)
 if section == "🏠 Home":

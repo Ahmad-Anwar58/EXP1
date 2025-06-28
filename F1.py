@@ -63,6 +63,40 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    /* Make form labels bold white */
+    label {
+        color: white !important;
+        font-weight: bold !important;
+    }
+
+    /* Make all divs that show output values bold black */
+    .stMarkdown, .stNumberInput, .stSlider, .stDataFrame, .stMetric {
+        color: black !important;
+        font-weight: bold !important;
+    }
+
+    /* For slider number limits */
+    .stSlider > div > div > div > span {
+        color: black !important;
+        font-weight: bold !important;
+    }
+
+    /* Make any spans (like numbers, percentages) bold black */
+    span {
+        color: black !important;
+        font-weight: bold !important;
+    }
+
+    /* Make sidebar titles like "Choose Module" black */
+    section[data-testid="stSidebar"] .css-16huue1 {
+        color: black !important;
+        font-weight: bold !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Load data
 @st.cache_data
 def load_data():

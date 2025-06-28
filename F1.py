@@ -41,40 +41,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Only change section content text to white (exclude main titles and inputs)
-st.markdown(
-    """
-    <style>
-    /* Paragraphs, markdown text, labels, etc. */
-    .block-container p,
-    .block-container span,
-    .block-container .stMarkdown,
-    .block-container .stMetricValue,
-    .block-container .stCaption,
-    .block-container .stDataFrame,
-    .block-container .stText,
-    .block-container .stSubheader,
-    .block-container .stCode,
-    .block-container .element-container > label,
-    .block-container .stPlotlyChart,
-    .block-container h4, .block-container h5, .block-container h6 {
-        color: white !important;
-    }
-
-    /* Prevent st.title (h1/h2) from turning white */
-    .block-container h1, .block-container h2 {
-        color: unset !important;
-    }
-
-    /* Inputs (keep as is) */
-    .stSelectbox, .stNumberInput, .stSlider, .stDateInput, .stTextInput, .stTextArea {
-        background-color: white !important;
-        color: black !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 
 # Load data

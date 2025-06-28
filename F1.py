@@ -12,60 +12,9 @@ import json
 import streamlit.components.v1 as components
 
 
-# -------- Page Config --------
 st.set_page_config(page_title="Crop IQ", layout="wide")
 
-# -------- Custom CSS --------
-st.markdown("""
-    <style>
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background-color: #ffffff;
-        border-right: 1px solid #ccc;
-    }
-    /* Sidebar icons and text */
-    .sidebar-item {
-        font-size: 18px;
-        padding: 10px 20px;
-        border-radius: 10px;
-        margin-bottom: 5px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: black;
-        font-weight: bold;
-        transition: all 0.2s;
-    }
-    .sidebar-item:hover {
-        background-color: #f0f0f0;
-        cursor: pointer;
-    }
-
-    /* Top bar */
-    .top-nav {
-        background-color: #ffffff;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 20px;
-        font-weight: bold;
-        border-bottom: 1px solid #ccc;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-    }
-
-    .app-body {
-        margin-top: 80px;
-    }
-
-    </style>
-""", unsafe_allow_html=True)
-
-# -------- Top Bar HTML --------
+# ===== TOP BAR =====
 st.markdown("""
     <style>
     .top-bar {
@@ -109,148 +58,75 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-
-# -------- Sidebar --------
+# ===== SIDEBAR =====
 with st.sidebar:
-    st.markdown("""
-        <style>
-        .custom-sidebar {
-            padding: 20px;
-        }
-        .custom-sidebar .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 18px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            color: #333;
-            transition: background 0.2s ease;
-        }
-        .custom-sidebar .sidebar-link:hover {
-            background-color: #f3f3f3;
-        }
-        .custom-sidebar .active {
-            background-color: #e0ebff;
-            color: #1a73e8;
-        }
-        .badge {
-            background-color: #ff6b6b;
-            color: white;
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: auto;
-        }
-        </style>
+    st.title("🌱 Crop IQ")
+    section = st.radio("📂 Choose Module", [
+        "🏠 Home",
+        "🌾 Yield Predictor",
+        "💧 Irrigation Forecast",
+        "🧪 Pesticide Estimator",
+        "💰 ROI Calculator",
+        "📊 Dashboard",
+        "💬 AgriTech Chatbot 🤖"
+    ])
 
-        <div class="custom-sidebar">
-            <div class="sidebar-link active">🏠 Dashboard</div>
-            <div class="sidebar-link">📚 Courses</div>
-            <div class="sidebar-link">📝 Assignment <span class="badge">3</span></div>
-            <div class="sidebar-link">📅 Calendar</div>
-        </div>
-    """, unsafe_allow_html=True)
+# ===== BODY WRAPPER =====
+st.markdown('<div style="margin-top:90px; padding: 20px;">', unsafe_allow_html=True)
 
 
-# -------- Main App Body --------
-st.markdown("""
-    <div style="margin-top: 90px; padding: 20px;">
-""", unsafe_allow_html=True)
+# ===== EXAMPLE MODULE HANDLER =====
+if section == "🏠 Home":
+    st.title("🏠 Home")
+    st.write("Welcome to Crop IQ!")
+elif section == "🌾 Yield Predictor":
+    st.title("🌾 Yield Predictor")
+elif section == "💧 Irrigation Forecast":
+    st.title("💧 Irrigation Forecast")
+# (Continue with your module content...)
 
-# Your main content
-selected_module = st.selectbox("Select Module:", ["Yield Predictor", "Irrigation Forecast", "Pesticide Estimator", "ROI Calculator"])
-st.write(f"### Showing: {selected_module}")
-
-# END OF WRAPPER
+# ===== CLOSE WRAPPER =====
 st.markdown("</div>", unsafe_allow_html=True)
-
-
 
 # === Inject Background Image ===
 @st.cache_data
-def get_base64_image(image_path, version=2):  # version to break cache
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    return None
 
-img_path = "appbackground11.jpg"  # <-- UPDATE THIS
-img_base64 = get_base64_image(img_path, version=2)
+img_base64 = get_base64_image("appbackground11.jpg")
 
+if img_base64:
+    st.markdown(f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpg;base64,{img_base64}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }}
+        .main .block-container {{
+            background-color: rgba(255,255,255,0.92);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }}
+        .predicted-result, .agri-chat-reply {{
+            color: black !important;
+            font-weight: bold;
+            font-size: 18px;
+            background-color: rgba(255,255,255,0.85);
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }}
+        </style>
+    """, unsafe_allow_html=True)
 
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpg;base64,{img_base64}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-position: center;
-    }}
-    .main .block-container {{
-        background-color: Black;
-        padding: 2rem;
-        border-radius: 10px;
-    }}
-    /* Style for predicted results (text only) */
-    .predicted-result, .agri-chat-reply {{
-        color: black !important;
-        font-weight: bold;
-        font-size: 18px;
-        background-color: rgba(255,255,255,0.85);
-        padding: 12px 20px;
-        border-radius: 10px;
-        margin-top: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown("""
-    <style>
-    /* Make form labels bold white but keep original size */
-    label {
-        color: white !important;
-        font-weight: bold !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-    <style>
-    /* Make form labels bold white */
-    label {
-        color: white !important;
-        font-weight: bold !important;
-    }
-
-    /* Make all divs that show output values bold black */
-    .stMarkdown, .stNumberInput, .stSlider, .stDataFrame, .stMetric {
-        color: black !important;
-        font-weight: bold !important;
-    }
-
-    /* For slider number limits */
-    .stSlider > div > div > div > span {
-        color: black !important;
-        font-weight: bold !important;
-    }
-
-    /* Make any spans (like numbers, percentages) bold black */
-    span {
-        color: black !important;
-        font-weight: bold !important;
-    }
-
-    /* Make sidebar titles like "Choose Module" black */
-    section[data-testid="stSidebar"] .css-16huue1 {
-        color: black !important;
-        font-weight: bold !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Load data
 @st.cache_data
@@ -263,7 +139,6 @@ def load_data():
 
 df = load_data()
 
-# Encode categoricals
 label_encoders = {}
 categorical_cols = ['crop_type', 'irrigation_type', 'fertilizer_type', 'crop_disease_status']
 for col in categorical_cols:
@@ -271,30 +146,16 @@ for col in categorical_cols:
     df[col] = le.fit_transform(df[col])
     label_encoders[col] = le
 
-# Remove non-numeric columns for default values and model training
 numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
 numeric_cols = [col for col in numeric_cols if col != 'yield_kg_per_hectare']
-
-# Shared model data
 default_values = df[numeric_cols].mean().to_dict()
+
 X = df[numeric_cols]
 y = df['yield_kg_per_hectare']
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X, y)
 
-# Sidebar Navigation
-st.sidebar.title("🌱 Crop IQ")
-section = st.sidebar.radio("📂 Choose Module", [
-    "🏠 Home",
-    "🌾 Yield Predictor",
-    "💧 Irrigation Forecast",
-    "🧪 Pesticide Estimator",
-    "💰 ROI Calculator",
-    "📊 Dashboard",
-    "💬 AgriTech Chatbot 🤖"
-])
 
-# Home (Welcome Screen)
 # Home (Welcome Screen)
 if section == "🏠 Home":
     st.markdown(
@@ -528,7 +389,6 @@ elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 Smart AgriTech Chatbot")
     st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")
 
-    import json
 
     @st.cache_data
     def load_faq():

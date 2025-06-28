@@ -129,8 +129,17 @@ model.fit(X, y)
 
 # Sidebar Navigation
 with st.sidebar:
-    st.title("🌱 Crop IQ")
+    # Custom large title
+    st.markdown("""
+        <div style='font-size: 36px; font-weight: 900; color: black; margin-bottom: 20px;'>
+            🌱 Crop IQ
+        </div>
+    """, unsafe_allow_html=True)
 
+    # Styled label for module selection
+    st.markdown("<div style='font-weight: 700; font-size: 17px; color: #000;'>📂 Choose Module</div>", unsafe_allow_html=True)
+
+    # Module selector (hide default label)
     menu_items = [
         "🏠 Home",
         "🌾 Yield Predictor",
@@ -140,22 +149,14 @@ with st.sidebar:
         "📊 Dashboard",
         "💬 AgriTech Chatbot 🤖"
     ]
-
-    # Manually styled label for module selector
-    st.markdown("<div style='font-weight: 700; font-size: 17px; color: #000;'>📂 Choose Module</div>", unsafe_allow_html=True)
-
-    # Hide the built-in label by passing empty string
     section = st.radio("", menu_items, index=0)
 
-    # Stylish button-like options
+    # CSS styling for options
     st.markdown("""
         <style>
-        /* Hide radio button circles */
         div[role="radiogroup"] > label > div[role="presentation"] > div:first-child {
             display: none;
         }
-
-        /* Style labels as rounded buttons */
         div[role="radiogroup"] > label {
             background-color: #f0f2f6;
             border-radius: 15px;
@@ -168,12 +169,9 @@ with st.sidebar:
             user-select: none;
             transition: background-color 0.3s ease;
         }
-
         div[role="radiogroup"] > label:hover {
             background-color: #d1d9ff;
         }
-
-        /* Highlight selected option */
         div[role="radiogroup"] > label[aria-checked="true"] {
             background-color: #4a90e2;
             color: white;
@@ -181,6 +179,7 @@ with st.sidebar:
         }
         </style>
     """, unsafe_allow_html=True)
+
 
 # Home (Welcome Screen)
 if section == "🏠 Home":

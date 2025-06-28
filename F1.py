@@ -94,24 +94,28 @@ if section == "🏠 Home":
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
 
-        <style>
-        .home-header {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 80px;
-            font-weight: 700;
-            font-style: italic;
-            margin-bottom: 5px;
-            margin-top: 20px;
-            color: Black;
-        }
-        .home-subtitle {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            font-style: italic;
-            margin-bottom: 40px;
-            color: Black;
-        }
+<style>
+.home-header {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 80px;
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 3px;  /* ↓ spacing after title */
+    margin-top: 20px;
+    color: white;
+}
+.home-subtitle {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    font-style: italic;
+    margin-top: 0;  /* ↑ spacing before subtitle */
+    margin-bottom: 30px;
+    color: white;
+}
+</style>
+
+
         .info-box {
             background-color: rgba(255, 255, 255, 0.85);
             color: black;

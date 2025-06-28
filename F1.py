@@ -14,18 +14,16 @@ import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Crop IQ", layout="wide")
 
-with st.sidebar:
-    st.title("🌱 Crop IQ")
-
-    menu_items = [
-        "🏠 Home",
-        "🌾 Yield Predictor",
-        "💧 Irrigation Forecast",
-        "🧪 Pesticide Estimator",
-        "💰 ROI Calculator",
-        "📊 Dashboard",
-        "💬 AgriTech Chatbot 🤖"
-]
+st.sidebar.title("🌱 Crop IQ")
+section = st.sidebar.radio("📂 Choose Module", [
+    "🏠 Home",
+    "🌾 Yield Predictor",
+    "💧 Irrigation Forecast",
+    "🧪 Pesticide Estimator",
+    "💰 ROI Calculator",
+    "📊 Dashboard",
+    "💬 AgriTech Chatbot 🤖"
+])
 
 section = st.radio("📂 Choose Module", menu_items, index=0)
     section = st.radio("📂 Choose Module", menu_items, index=0)

@@ -72,9 +72,9 @@ model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X, y)
 
 # Sidebar Navigation
-# Sidebar Navigation
-st.sidebar.title("🌱 Smart AgriTech")
+st.sidebar.title("🌱 Crop IQ")
 section = st.sidebar.radio("📂 Choose Module", [
+    "🏠 Home",
     "🌾 Yield Predictor",
     "💧 Irrigation Forecast",
     "🧪 Pesticide Estimator",
@@ -83,8 +83,8 @@ section = st.sidebar.radio("📂 Choose Module", [
     "💬 AgriTech Chatbot 🤖"
 ])
 
-# Welcome screen – displayed when app is opened
-if section == "":
+# Home (Welcome Screen)
+if section == "🏠 Home":
     st.markdown(
         """
         <div style='text-align: center; padding-top: 100px;'>

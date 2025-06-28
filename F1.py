@@ -17,9 +17,7 @@ st.set_page_config(page_title="Crop IQ", layout="wide")
 with st.sidebar:
     st.title("🌱 Crop IQ")
 
-st.title("🌱 Crop IQ")
-
-menu_items = [
+    menu_items = [
         "🏠 Home",
         "🌾 Yield Predictor",
         "💧 Irrigation Forecast",

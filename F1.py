@@ -10,7 +10,91 @@ import base64
 import streamlit.components.v1 as components
 
 # Set modern page config
-st.set_page_config(page_title="CropIQ – Intelligent Crop Yield Optimizer", layout="wide")
+import streamlit as st
+
+# -------- Page Config --------
+st.set_page_config(page_title="Crop IQ", layout="wide")
+
+# -------- Custom CSS --------
+st.markdown("""
+    <style>
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: #ffffff;
+        border-right: 1px solid #ccc;
+    }
+    /* Sidebar icons and text */
+    .sidebar-item {
+        font-size: 18px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: black;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+    .sidebar-item:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+
+    /* Top bar */
+    .top-nav {
+        background-color: #ffffff;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+
+    .app-body {
+        margin-top: 80px;
+    }
+
+    </style>
+""", unsafe_allow_html=True)
+
+# -------- Top Bar HTML --------
+st.markdown("""
+    <div class="top-nav">
+        🌾 Crop IQ - Smart Agriculture System
+        <div>📊 Dashboard | 🤖 Chatbot | 🔧 Settings</div>
+    </div>
+""", unsafe_allow_html=True)
+
+# -------- Sidebar --------
+with st.sidebar:
+    st.markdown("""
+        <div class="sidebar-item">🏠 Home</div>
+        <div class="sidebar-item">🌽 Yield Predictor</div>
+        <div class="sidebar-item">💧 Irrigation Forecast</div>
+        <div class="sidebar-item">🧪 Pesticide Estimator</div>
+        <div class="sidebar-item">💰 ROI Calculator</div>
+        <div class="sidebar-item">📊 Dashboard</div>
+        <div class="sidebar-item">🤖 AgriTech Chatbot</div>
+    """, unsafe_allow_html=True)
+
+# -------- Main App Body --------
+st.markdown('<div class="app-body">', unsafe_allow_html=True)
+
+# Replace this with your main content module switch logic
+selected_module = st.selectbox("Select Module:", ["Yield Predictor", "Irrigation Forecast", "Pesticide Estimator", "ROI Calculator"])
+st.write(f"### Showing: {selected_module}")
+
+# END OF WRAPPER
+st.markdown('</div>', unsafe_allow_html=True)
+
 
 # === Inject Background Image ===
 @st.cache_data

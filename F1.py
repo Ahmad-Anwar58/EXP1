@@ -87,35 +87,73 @@ section = st.sidebar.radio("📂 Choose Module", [
 ])
 
 # Home (Welcome Screen)
+# Home (Welcome Screen)
 if section == "🏠 Home":
     st.markdown(
         """
-        <!-- Load Google Font that closely resembles Math Sans Bold Italic -->
+        <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
 
         <style>
         .home-header {
             font-family: 'Roboto Mono', monospace;
-            font-size: 90px;
+            font-size: 80px;
             font-weight: 700;
             font-style: italic;
-            margin-bottom: 10px;
-            margin-top: 10px;
-            color: Black;
+            margin-bottom: 5px;
+            margin-top: 20px;
+            color: white;
         }
         .home-subtitle {
             font-family: 'Roboto Mono', monospace;
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 700;
             font-style: italic;
-            margin-top: 0;
-            color: Black;
+            margin-bottom: 40px;
+            color: white;
+        }
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: black;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            margin: 20px 0;
         }
         </style>
 
-        <div style='text-align: center; padding-top: 10px;'>
+        <div style='text-align: center; padding-top: 20px;'>
             <div class='home-header'>Crop IQ</div>
             <div class='home-subtitle'>Your Digital Agronomy Partner.</div>
+        </div>
+
+        <div class='info-box'>
+            <h3>About Us</h3>
+            <p>
+                Crop IQ is a smart agriculture assistant designed to help farmers make data-driven decisions.
+                From predicting crop yield and irrigation schedules to pesticide planning and ROI calculation,
+                our tools put precision farming in your hands. With interactive dashboards and a built-in chatbot,
+                Crop IQ simplifies farming for better productivity and profit.
+            </p>
+        </div>
+
+        <div class='info-box'>
+            <h3>How It Works</h3>
+            <p>
+                Crop IQ uses your farm’s data—like soil, weather, and crop type—to predict yield, irrigation needs,
+                and pesticide schedules using AI models. It calculates your expected Return on Investment (ROI) and
+                displays everything through simple, visual dashboards.
+            </p>
+        </div>
+
+        <div class='info-box'>
+            <h3>Contact Info</h3>
+            <p>
+                developercropiq@gmail.com<br>
+                +923011063405<br>
+                Wapda Town, Lahore, Pakistan<br>
+                Postal Add: 058002
+            </p>
         </div>
         """,
         unsafe_allow_html=True

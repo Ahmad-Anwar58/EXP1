@@ -67,33 +67,104 @@ st.markdown("""
 
 # -------- Top Bar HTML --------
 st.markdown("""
-    <div class="top-nav">
-        🌾 Crop IQ - Smart Agriculture System
-        <div>📊 Dashboard | 🤖 Chatbot | 🔧 Settings</div>
+    <style>
+    .top-bar {
+        background: white;
+        border-bottom: 1px solid #eee;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+    }
+    .top-bar .logo {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .top-bar .actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .top-bar .circle-icon {
+        width: 36px;
+        height: 36px;
+        background: #f3f3f3;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+    }
+    </style>
+    <div class="top-bar">
+        <div class="logo">📦 InsideBox</div>
+        <div class="actions">
+            <div class="circle-icon">🔔</div>
+            <div class="circle-icon">💬</div>
+            <div class="circle-icon">👤</div>
+        </div>
     </div>
 """, unsafe_allow_html=True)
+
 
 # -------- Sidebar --------
 with st.sidebar:
     st.markdown("""
-        <div class="sidebar-item">🏠 Home</div>
-        <div class="sidebar-item">🌽 Yield Predictor</div>
-        <div class="sidebar-item">💧 Irrigation Forecast</div>
-        <div class="sidebar-item">🧪 Pesticide Estimator</div>
-        <div class="sidebar-item">💰 ROI Calculator</div>
-        <div class="sidebar-item">📊 Dashboard</div>
-        <div class="sidebar-item">🤖 AgriTech Chatbot</div>
+        <style>
+        .custom-sidebar {
+            padding: 20px;
+        }
+        .custom-sidebar .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #333;
+            transition: background 0.2s ease;
+        }
+        .custom-sidebar .sidebar-link:hover {
+            background-color: #f3f3f3;
+        }
+        .custom-sidebar .active {
+            background-color: #e0ebff;
+            color: #1a73e8;
+        }
+        .badge {
+            background-color: #ff6b6b;
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+        </style>
+
+        <div class="custom-sidebar">
+            <div class="sidebar-link active">🏠 Dashboard</div>
+            <div class="sidebar-link">📚 Courses</div>
+            <div class="sidebar-link">📝 Assignment <span class="badge">3</span></div>
+            <div class="sidebar-link">📅 Calendar</div>
+        </div>
     """, unsafe_allow_html=True)
 
-# -------- Main App Body --------
-st.markdown('<div class="app-body">', unsafe_allow_html=True)
 
-# Replace this with your main content module switch logic
+# -------- Main App Body --------
+st.markdown("""
+    <div style="margin-top: 90px; padding: 20px;">
+""", unsafe_allow_html=True)
+
+# Your main content
 selected_module = st.selectbox("Select Module:", ["Yield Predictor", "Irrigation Forecast", "Pesticide Estimator", "ROI Calculator"])
 st.write(f"### Showing: {selected_module}")
 
 # END OF WRAPPER
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # === Inject Background Image ===

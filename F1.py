@@ -253,7 +253,7 @@ elif section == "💧 Irrigation Forecast":
     encoded_crop = le_crop.transform([crop_in])[0]
     X_input = pd.DataFrame([[encoded_crop, sm, temp, rain]], columns=X_irrig.columns)
     result = model_irrig.predict(X_input)[0]
-    st.info(f"Recommended irrigation every {result:.1f} days.")
+    st.markdown(f"<div class='predicted-result'>💧 Recommended irrigation every {result:.1f} days.</div>", unsafe_allow_html=True)
 
 # 4. Pesticide Estimator
 elif section == "🧪 Pesticide Estimator":
@@ -279,7 +279,7 @@ elif section == "🧪 Pesticide Estimator":
     }])
 
     pred_ml = model_p.predict(input_df)[0]
-    st.success(f"Estimated pesticide required: {pred_ml:.2f} ml")
+    st.markdown(f"<div class='predicted-result'>🧪 Estimated pesticide required: {pred_ml:.2f} ml</div>", unsafe_allow_html=True)
 
 # 5. ROI Calculator
 elif section == "💰 ROI Calculator":
@@ -316,6 +316,8 @@ elif section == "💰 ROI Calculator":
     st.metric("Revenue (PKR/acre)", f"{revenue:,.0f}")
     st.metric("Profit", f"{profit:,.0f}")
     st.metric("ROI", f"{roi:.2f}%")
+    st.markdown(f"<div class='predicted-result'>💰 Estimated Profit: PKR {profit:,.0f} | ROI: {roi:.2f}%</div>", unsafe_allow_html=True)
+
 
     acres = st.slider("Scale (Acres)", 1, 100, 5)
     st.write("---")

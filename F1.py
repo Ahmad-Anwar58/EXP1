@@ -14,54 +14,11 @@ import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Crop IQ", layout="wide")
 
-# ===== TOP BAR =====
-st.markdown("""
-    <style>
-    .top-bar {
-        background: white;
-        border-bottom: 1px solid #eee;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        width: 100%;
-        z-index: 999;
-    }
-    .top-bar .logo {
-        font-weight: bold;
-        font-size: 20px;
-    }
-    .top-bar .actions {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    .top-bar .circle-icon {
-        width: 36px;
-        height: 36px;
-        background: #f3f3f3;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 18px;
-    }
-    </style>
-    <div class="top-bar">
-        <div class="logo">📦 InsideBox</div>
-        <div class="actions">
-            <div class="circle-icon">🔔</div>
-            <div class="circle-icon">💬</div>
-            <div class="circle-icon">👤</div>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
-
 # ===== SIDEBAR =====
 with st.sidebar:
     st.title("🌱 Crop IQ")
-    section = st.radio("📂 Choose Module", [
+
+    menu_items = [
         "🏠 Home",
         "🌾 Yield Predictor",
         "💧 Irrigation Forecast",
@@ -69,14 +26,44 @@ with st.sidebar:
         "💰 ROI Calculator",
         "📊 Dashboard",
         "💬 AgriTech Chatbot 🤖"
-    ])
+    ]
 
-# ===== BODY WRAPPER =====
-st.markdown('<div style="margin-top:90px; padding: 20px;">', unsafe_allow_html=True)
+    if "selected_module" not in st.session_state:
+        st.session_state.selected_module = "🏠 Home"
 
+    st.markdown("""
+        <style>
+        .menu-button {
+            background-color: #f0f2f6;
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            color: #111;
+            transition: background-color 0.3s ease;
+            user-select: none;
+            text-align: center;
+        }
+        .menu-button:hover {
+            background-color: #d1d9ff;
+        }
+        .menu-button.selected {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: 700;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
-# ===== CLOSE WRAPPER =====
-st.markdown("</div>", unsafe_allow_html=True)
+    for item in menu_items:
+        selected_class = "selected" if st.session_state.selected_module == item else ""
+        if st.button(item, key=item):
+            st.session_state.selected_module = item
+        st.markdown(f"<div class='menu-button {selected_class}'>{item}</div>", unsafe_allow_html=True)
+
+section = st.session_state.selected_module
 
 # === Inject Background Image ===
 @st.cache_data

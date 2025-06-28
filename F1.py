@@ -87,28 +87,35 @@ section = st.sidebar.radio("📂 Choose Module", [
 ])
 
 # Home (Welcome Screen)
-
 if section == "🏠 Home":
     st.markdown(
         """
+        <!-- Load Google Font that closely resembles Math Sans Bold Italic -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
+
         <style>
         .home-header {
+            font-family: 'Roboto Mono', monospace;
             font-size: 90px;
             font-weight: 700;
+            font-style: italic;
             margin-bottom: 10px;
             margin-top: 10px;
             color: white;
         }
         .home-subtitle {
+            font-family: 'Roboto Mono', monospace;
             font-size: 30px;
+            font-weight: 700;
+            font-style: italic;
             margin-top: 0;
             color: white;
         }
         </style>
 
         <div style='text-align: center; padding-top: 10px;'>
-            <div class='home-header'>𝘾𝙧𝙤𝙥 𝙄𝙌</div>
-            <div class='home-subtitle'>𝙔𝙤𝙪𝙧 𝘿𝙞𝙜𝙞𝙩𝙖𝙡 𝘼𝙜𝙧𝙤𝙣𝙤𝙢𝙮 𝙋𝙖𝙧𝙩𝙣𝙚𝙧.</div>
+            <div class='home-header'>Crop IQ</div>
+            <div class='home-subtitle'>Your Digital Agronomy Partner.</div>
         </div>
         """,
         unsafe_allow_html=True

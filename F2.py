@@ -128,7 +128,6 @@ model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X, y)
 
 # Sidebar Navigation
-# ===== SIDEBAR =====
 with st.sidebar:
     st.title("🌱 Crop IQ")
 
@@ -142,8 +141,13 @@ with st.sidebar:
         "💬 AgriTech Chatbot 🤖"
     ]
 
-    section = st.radio("📂 Choose Module", menu_items, index=0)
+    # Manually styled label for module selector
+    st.markdown("<div style='font-weight: 700; font-size: 17px; color: #000;'>📂 Choose Module</div>", unsafe_allow_html=True)
 
+    # Hide the built-in label by passing empty string
+    section = st.radio("", menu_items, index=0)
+
+    # Stylish button-like options
     st.markdown("""
         <style>
         /* Hide radio button circles */
@@ -169,7 +173,7 @@ with st.sidebar:
             background-color: #d1d9ff;
         }
 
-        /* Highlight the selected option */
+        /* Highlight selected option */
         div[role="radiogroup"] > label[aria-checked="true"] {
             background-color: #4a90e2;
             color: white;
@@ -178,7 +182,6 @@ with st.sidebar:
         </style>
     """, unsafe_allow_html=True)
 
-# Home (Welcome Screen)
 # Home (Welcome Screen)
 if section == "🏠 Home":
     st.markdown(

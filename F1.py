@@ -100,7 +100,7 @@ if section == "🏠 Home":
             font-size: 80px;
             font-weight: 700;
             font-style: italic;
-            margin-bottom: 2px;  /* ↓ spacing after title */
+            margin-bottom: 1px;  /* ↓ spacing after title */
             margin-top: 20px;
             color: Black;
         }

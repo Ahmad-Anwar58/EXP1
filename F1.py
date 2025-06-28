@@ -53,6 +53,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown("""
+    <style>
+    /* Make form labels bold white but keep original size */
+    label {
+        color: white !important;
+        font-weight: bold !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
 # Load data
 @st.cache_data

@@ -197,63 +197,92 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # Home (Welcome Screen)
+if section == "🏠 Home":
+    st.markdown(
+        """
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@1,700&display=swap" rel="stylesheet">
 
-st.markdown("""
-    <style>
-    .info-box {
-        background-color: rgba(255, 255, 255, 0.85);
-        color: black;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-        margin-bottom: 15px;
-        height: 100%;
-    }
+        <style>
+        .home-header {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 80px;
+            font-weight: 700;
+            font-style: italic;
+            margin-bottom: 1px;
+            margin-top: 20px;
+            color: black;
+            text-align: center;
+        }
+        .home-subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            font-style: italic;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: black;
+            text-align: center;
+        }
+        .info-box {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: black;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+            height: 100%;
+        }
+        .contact-box {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: black;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+        }
+        </style>
 
-    .contact-box {
-        background-color: rgba(255, 255, 255, 0.85);
-        color: black;
-        padding: 20px 30px;
-        border-radius: 15px;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-        margin-top: 10px;
-        font-weight: 600;
-        font-size: 16px;
-    }
-    </style>
-""", unsafe_allow_html=True)
+        <div class='home-header'>Crop IQ</div>
+        <div class='home-subtitle'>Your Digital Agronomy Partner.</div>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Two side-by-side boxes
-col1, col2 = st.columns(2)
+    # Two boxes side-by-side
+    col1, col2 = st.columns(2)
 
-with col1:
+    with col1:
+        st.markdown("""
+            <div class='info-box'>
+                <h3>About Us</h3>
+                <p>
+                    Crop IQ is a smart agriculture assistant that helps farmers make data-driven decisions.
+                    It predicts yield, irrigation schedules, pesticide needs, and ROI—all in one place.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+            <div class='info-box'>
+                <h3>How It Works</h3>
+                <p>
+                    Using AI and your farm data (soil, weather, crop type), Crop IQ models agricultural predictions 
+                    and shows results through visual dashboards and tools.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # Contact info full-width box
     st.markdown("""
-        <div class='info-box'>
-            <h3>About Us</h3>
-            <p>
-                Crop IQ is a smart agriculture assistant that helps farmers make data-driven decisions.
-                It predicts yield, irrigation schedules, pesticide needs, and ROI—all in one place.
-            </p>
+        <div class='contact-box'>
+            📧 developercropiq@gmail.com  📞 +92 301 1063405  📍 Wapda Town, Lahore, Pakistan  📬 Postal Code: 058002
         </div>
     """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown("""
-        <div class='info-box'>
-            <h3>How It Works</h3>
-            <p>
-                Using AI and your farm data (soil, weather, crop type), Crop IQ models agricultural predictions 
-                and shows results through visual dashboards and tools.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-# Full-width Contact Info box
-st.markdown("""
-    <div class='contact-box'>
-        📧 developercropiq@gmail.com  📞 +92 301 1063405  📍 Wapda Town, Lahore, Pakistan  📬 Postal Code: 058002
-    </div>
-""", unsafe_allow_html=True)
 
 
 # 1. Dashboard

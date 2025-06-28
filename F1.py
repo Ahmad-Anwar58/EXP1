@@ -75,16 +75,6 @@ with st.sidebar:
 st.markdown('<div style="margin-top:90px; padding: 20px;">', unsafe_allow_html=True)
 
 
-# ===== EXAMPLE MODULE HANDLER =====
-if section == "🏠 Home":
-    st.title("🏠 Home")
-    st.write("Welcome to Crop IQ!")
-elif section == "🌾 Yield Predictor":
-    st.title("🌾 Yield Predictor")
-elif section == "💧 Irrigation Forecast":
-    st.title("💧 Irrigation Forecast")
-# (Continue with your module content...)
-
 # ===== CLOSE WRAPPER =====
 st.markdown("</div>", unsafe_allow_html=True)
 

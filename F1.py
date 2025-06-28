@@ -37,11 +37,21 @@ st.markdown(
         padding: 2rem;
         border-radius: 10px;
     }}
+    /* Style for predicted results (text only) */
+    .predicted-result, .agri-chat-reply {{
+        color: black !important;
+        font-weight: bold;
+        font-size: 18px;
+        background-color: rgba(255,255,255,0.85);
+        padding: 12px 20px;
+        border-radius: 10px;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }}
     </style>
     """,
     unsafe_allow_html=True
 )
-
 
 
 # Load data
@@ -207,7 +217,8 @@ elif section == "🌾 Yield Predictor":
 
     prediction = model.predict(pd.DataFrame([new_input]))[0]
     maunds = (prediction / 40) / 2.47105
-    st.success(f"Predicted Yield: {maunds:.2f} maunds/acre")
+    st.markdown(f"<div class='predicted-result'>🌾 Predicted Yield: {maunds:.2f} maunds/acre</div>", unsafe_allow_html=True)
+
 
 # 3. Irrigation Forecast
 elif section == "💧 Irrigation Forecast":

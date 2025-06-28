@@ -41,25 +41,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Add white sidebar text color for visibility
-st.markdown(
-    """
-    <style>
-    section[data-testid="stSidebar"] .css-1v3fvcr,
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] div,
-    section[data-testid="stSidebar"] span {
-        color: white !important;
-    }
-
-    section[data-testid="stSidebar"] .css-1v3fvcr input:checked + div {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-        border-radius: 0.5rem;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # Load data
 @st.cache_data

@@ -101,7 +101,7 @@ if section == "🏠 Home":
             font-style: italic;
             margin-bottom: 10px;
             margin-top: 10px;
-            color: white;
+            color: Black;
         }
         .home-subtitle {
             font-family: 'Roboto Mono', monospace;
@@ -109,7 +109,7 @@ if section == "🏠 Home":
             font-weight: 700;
             font-style: italic;
             margin-top: 0;
-            color: white;
+            color: Black;
         }
         </style>
 

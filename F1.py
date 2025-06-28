@@ -87,12 +87,33 @@ section = st.sidebar.radio("📂 Choose Module", [
 ])
 
 # Home (Welcome Screen)
+# Home (Welcome Screen)
 if section == "🏠 Home":
     st.markdown(
         """
-        <div style='text-align: center; padding-top: 40px; color: white;'>
-            <h1 style='font-size: 80px; font-weight: bold; margin-bottom: 10px;'>Crop IQ</h1>
-            <p style='font-size: 32px; margin-top: 0;'>Your Digital Agronomy Partner.</p>
+        <!-- Load Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+
+        <style>
+        .home-header {
+            font-family: 'Cinzel', serif;
+            font-size: 90px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            color: white;
+        }
+        .home-subtitle {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 30px;
+            margin-top: 0;
+            color: white;
+        }
+        </style>
+
+        <div style='text-align: center; padding-top: 10px;'>
+            <div class='home-header'>Crop IQ</div>
+            <div class='home-subtitle'>Your Digital Agronomy Partner.</div>
         </div>
         """,
         unsafe_allow_html=True

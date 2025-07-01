@@ -14,7 +14,7 @@ from io import StringIO
 
 @st.cache_data(ttl=60)
 def load_live_data():
-    response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/real_time_data.csv")
+    response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/real_time_data.csv")
     response.raise_for_status()
     df_live = pd.read_csv(StringIO(response.text))
     df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])

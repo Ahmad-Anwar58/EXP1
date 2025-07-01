@@ -464,25 +464,24 @@ elif section == "💬 AgriTech Chatbot 🤖":
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
 
-#Real time sensor data
+# Real time sensor data
 elif section == "📡 Live Sensor Data":
     st.title("📡 Live Sensor Data Monitor")
+    st.markdown('<meta http-equiv="refresh" content="10">', unsafe_allow_html=True)
 
     import requests
 
     try:
         response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/Data.csv")
         if response.status_code == 200:
-            # Read the CSV data into DataFrame
             from io import StringIO
             df_live = pd.read_csv(StringIO(response.text))
 
-            # Sort by timestamp to get the latest reading
             df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
             df_live = df_live.sort_values(by="timestamp", ascending=False)
-            latest = df_live.iloc[0]  # Most recent sensor reading
+            latest = df_live.iloc[0]
 
-            # Show metrics
+            # Metrics
             col1, col2, col3 = st.columns(3)
             col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
             col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
@@ -496,7 +495,7 @@ elif section == "📡 Live Sensor Data":
             st.markdown("### 🧾 Most Recent Sensor Data")
             st.dataframe(latest.to_frame().T)
 
-            # Optional: Map
+            # Map view
             if not pd.isna(latest['latitude']) and not pd.isna(latest['longitude']):
                 st.map(pd.DataFrame({
                     'lat': [latest['latitude']],

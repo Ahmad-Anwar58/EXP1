@@ -539,3 +539,30 @@ if st.requested_url and st.requested_url.endswith("/send-data"):
     else:
         st.warning("This page only accepts POST requests from Flask.")
 
+import streamlit as st
+import json
+
+@st.experimental_singleton
+def get_api_key():
+    return st.secrets.get("API_KEY", "None")
+
+# ✅ Handle incoming real-time data from Flask
+if st.experimental_get_query_params().get("view") == ["send"]:
+    st.title("🔄 Real-Time Data Receiver")
+
+    # Show raw POSTed data
+    try:
+        raw_json = st.experimental_get_query_params().get("payload", [None])[0]
+        if raw_json:
+            data = json.loads(raw_json)
+            st.success("✅ Data received from Flask:")
+            st.json(data)
+
+            # Optional: Save to CSV or show visuals
+            st.write("📊 Add logic to store/display this data here.")
+
+        else:
+            st.warning("⚠️ No data received.")
+    except Exception as e:
+        st.error(f"❌ Error: {e}")
+

@@ -463,6 +463,30 @@ elif section == "💬 AgriTech Chatbot 🤖":
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
 
+#Real time sensor data
+elif section == "📡 Live Sensor Data":
+    st.title("📡 Real-Time Sensor Data")
+
+    import requests
+    from streamlit.runtime.scriptrunner import get_script_run_ctx
+
+    API_KEY = st.secrets["api_key"] if "api_key" in st.secrets else "BSBACropTool_2025_secret"
+
+    try:
+        # Simulate fetching latest data sent to Streamlit (from Flask)
+        # You'll eventually replace this with live storage or caching
+        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/live_data.json")
+
+        if response.status_code == 200:
+            data = response.json()
+            st.json(data)  # Shows full JSON
+            st.success("✅ Latest real-time data received:")
+        else:
+            st.warning("⚠️ No real-time data received yet.")
+
+    except Exception as e:
+        st.error(f"Error fetching live data: {e}")
+
 
 import streamlit.web as stweb
 from urllib.parse import urlparse

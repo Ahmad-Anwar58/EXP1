@@ -8,7 +8,18 @@ from datetime import datetime
 import plotly.express as px
 import base64
 import streamlit.components.v1 as components
+import requests
+from io import StringIO
 
+
+@st.cache_data(ttl=60)
+def load_live_data():
+    response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv")
+    response.raise_for_status()
+    df_live = pd.read_csv(StringIO(response.text))
+    df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
+    return df_live.sort_values(by="timestamp", ascending=False)
+    
 # Set modern page config
 st.set_page_config(page_title="CropIQ – Intelligent Crop Yield Optimizer", layout="wide")
 
@@ -467,39 +478,29 @@ elif section == "💬 AgriTech Chatbot 🤖":
 # 6. Live Sensor Data Monitor
 elif section == "📡 Live Sensor Data":
     st.title("📡 Live Sensor Data Monitor")
-    st.markdown('<meta http-equiv="refresh" content="10">', unsafe_allow_html=True)
-
-    import requests
-    from io import StringIO
 
     try:
-        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv")
-        if response.status_code == 200:
-            df_live = pd.read_csv(StringIO(response.text))
-            df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
-            df_live = df_live.sort_values(by="timestamp", ascending=False)
-            latest = df_live.iloc[0]
+        df_live = load_live_data()
+        latest = df_live.iloc[0]
 
-            col1, col2, col3 = st.columns(3)
-            col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
-            col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
-            col3.metric("🌿 NDVI Index", f"{latest['NDVI_index']}")
+        col1, col2, col3 = st.columns(3)
+        col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
+        col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
+        col3.metric("🌿 NDVI Index", f"{latest['NDVI_index']}")
 
-            col4, col5, col6 = st.columns(3)
-            col4.metric("☀️ Sunlight (hrs)", f"{latest['sunlight_hours']}")
-            col5.metric("☔ Rainfall (mm)", f"{latest['rainfall_mm']}")
-            col6.metric("💨 Humidity (%)", f"{latest['humidity_%']}")
+        col4, col5, col6 = st.columns(3)
+        col4.metric("☀️ Sunlight (hrs)", f"{latest['sunlight_hours']}")
+        col5.metric("☔ Rainfall (mm)", f"{latest['rainfall_mm']}")
+        col6.metric("💨 Humidity (%)", f"{latest['humidity_%']}")
 
-            st.markdown("### 🧾 Most Recent Sensor Data")
-            st.dataframe(latest.to_frame().T)
+        st.markdown("### 🧾 Most Recent Sensor Data")
+        st.dataframe(latest.to_frame().T)
 
-            if not pd.isna(latest['latitude']) and not pd.isna(latest['longitude']):
-                st.map(pd.DataFrame({
-                    'lat': [latest['latitude']],
-                    'lon': [latest['longitude']]
-                }))
-        else:
-            st.warning("⚠️ Failed to load live data from GitHub.")
+        if not pd.isna(latest.get('latitude')) and not pd.isna(latest.get('longitude')):
+            st.map(pd.DataFrame({
+                'lat': [latest['latitude']],
+                'lon': [latest['longitude']]
+            }))
 
     except Exception as e:
         st.error(f"❌ Error fetching live data: {e}")

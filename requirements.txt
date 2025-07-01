@@ -1,3 +1,4 @@
+# Core Dashboard & Data Science
 streamlit
 scikit-learn
 pandas
@@ -7,5 +8,17 @@ joblib
 plotly
 seaborn
 openpyxl
-flask
 requests
+
+# Flask API support
+flask
+
+# 🔍 Chatbot & AI Intelligence
+langchain
+langchain-community
+langchain-together
+sentence-transformers
+chromadb
+PyPDF2
+tqdm
+beautifulsoup4

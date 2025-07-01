@@ -8,7 +8,7 @@ from github import Github
 
 # ========== SIMULATION CONFIG ==========
 FLASK_URL = "http://127.0.0.1:5000/receive-data"  # Local Flask server
-GITHUB_TOKEN = "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"  # 🔐 Your GitHub token
+GITHUB_TOKEN = "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"  # 🔐 Your GitHub token
 REPO_NAME = "Ahmad-Anwar58/EXP1"
 BRANCH = "main"
 CSV_FILENAME = "real_time_data.csv"

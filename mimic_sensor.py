@@ -5,10 +5,14 @@ import pandas as pd
 from datetime import datetime
 import os
 from github import Github
+from dotenv import load_dotenv  # ⬅️ NEW
+
+# ========== LOAD ENV VARIABLES ==========
+load_dotenv()
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # ⬅️ Loaded from .env
 
 # ========== SIMULATION CONFIG ==========
-FLASK_URL = "http://127.0.0.1:5000/receive-data"  # Local Flask server
-GITHUB_TOKEN = "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"  # 🔐 Your GitHub token
+FLASK_URL = "http://127.0.0.1:5000/receive-data"
 REPO_NAME = "Ahmad-Anwar58/EXP1"
 BRANCH = "main"
 CSV_FILENAME = "real_time_data.csv"
@@ -43,7 +47,6 @@ def push_to_github(data_dict):
         new_csv = df.to_csv(index=False)
         repo.update_file(contents.path, "🔄 Update real_time_data.csv with new sensor values", new_csv, contents.sha, branch=BRANCH)
     except Exception as e:
-        # File might not exist, so create it
         df = pd.DataFrame([data_dict])
         repo.create_file(CSV_FILENAME, "🚀 Create real_time_data.csv with initial sensor data", df.to_csv(index=False), branch=BRANCH)
 

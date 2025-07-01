@@ -464,21 +464,18 @@ elif section == "💬 AgriTech Chatbot 🤖":
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
 
-# Real time sensor data
+# 6. Live Sensor Data Monitor
 elif section == "📡 Live Sensor Data":
     st.title("📡 Live Sensor Data Monitor")
-    st.markdown('<meta http-equiv="refresh" content="60">', unsafe_allow_html=True)  # Auto-refresh every 60 seconds
+    st.markdown('<meta http-equiv="refresh" content="10">', unsafe_allow_html=True)
 
     import requests
     from io import StringIO
 
     try:
-        url = "https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv"
-        response = requests.get(url)
-
+        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv")
         if response.status_code == 200:
             df_live = pd.read_csv(StringIO(response.text))
-
             df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
             df_live = df_live.sort_values(by="timestamp", ascending=False)
             latest = df_live.iloc[0]
@@ -502,77 +499,8 @@ elif section == "📡 Live Sensor Data":
                     'lon': [latest['longitude']]
                 }))
         else:
-            st.warning("⚠️ Failed to load live sensor data from GitHub.")
+            st.warning("⚠️ Failed to load live data from GitHub.")
+
     except Exception as e:
-        st.error(f"❌ Error fetching sensor data: {e}")
-
-
-
-
-
-import streamlit.web as stweb
-from urllib.parse import urlparse
-import json
-
-
-import streamlit as st
-import json
-
-if "send-data" in st.query_params:
-    # Streamlit receives forwarded data here
-    payload = st.query_params["send-data"]
-    st.success("📡 Received Realtime Data")
-    st.json(payload)
-
-import streamlit as st
-import json
-
-# Add a hidden route/page to show live Flask-posted data
-st.experimental_singleton.clear()  # clear cache for testing
-
-if st.requested_url and st.requested_url.endswith("/send-data"):
-    st.title("📡 Real-Time Sensor Data Received")
-
-    # Read raw POST data from Flask
-    if st.requested_method == "POST":
-        try:
-            payload = st.get_json()
-            st.success("Data received successfully from Flask!")
-            st.json(payload)
-
-            # (Optional) Save to CSV
-            df = pd.DataFrame([payload])
-            df.to_csv("live_data_log.csv", mode="a", header=not pd.io.common.file_exists("live_data_log.csv"), index=False)
-
-        except Exception as e:
-            st.error(f"Error processing data: {e}")
-    else:
-        st.warning("This page only accepts POST requests from Flask.")
-
-import streamlit as st
-import json
-
-@st.experimental_singleton
-def get_api_key():
-    return st.secrets.get("API_KEY", "None")
-
-# ✅ Handle incoming real-time data from Flask
-if st.experimental_get_query_params().get("view") == ["send"]:
-    st.title("🔄 Real-Time Data Receiver")
-
-    # Show raw POSTed data
-    try:
-        raw_json = st.experimental_get_query_params().get("payload", [None])[0]
-        if raw_json:
-            data = json.loads(raw_json)
-            st.success("✅ Data received from Flask:")
-            st.json(data)
-
-            # Optional: Save to CSV or show visuals
-            st.write("📊 Add logic to store/display this data here.")
-
-        else:
-            st.warning("⚠️ No data received.")
-    except Exception as e:
-        st.error(f"❌ Error: {e}")
+        st.error(f"❌ Error fetching live data: {e}")
 

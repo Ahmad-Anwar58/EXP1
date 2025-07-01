@@ -466,27 +466,47 @@ elif section == "💬 AgriTech Chatbot 🤖":
 
 #Real time sensor data
 elif section == "📡 Live Sensor Data":
-    st.title("📡 Real-Time Sensor Data")
+    st.title("📡 Live Sensor Data Monitor")
 
     import requests
-    from streamlit.runtime.scriptrunner import get_script_run_ctx
-
-    API_KEY = st.secrets["api_key"] if "api_key" in st.secrets else "BSBACropTool_2025_secret"
 
     try:
-        # Simulate fetching latest data sent to Streamlit (from Flask)
-        # You'll eventually replace this with live storage or caching
-        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/live_data.json")
-
+        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/Data.csv")
         if response.status_code == 200:
-            data = response.json()
-            st.json(data)  # Shows full JSON
-            st.success("✅ Latest real-time data received:")
-        else:
-            st.warning("⚠️ No real-time data received yet.")
+            # Read the CSV data into DataFrame
+            from io import StringIO
+            df_live = pd.read_csv(StringIO(response.text))
 
+            # Sort by timestamp to get the latest reading
+            df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
+            df_live = df_live.sort_values(by="timestamp", ascending=False)
+            latest = df_live.iloc[0]  # Most recent sensor reading
+
+            # Show metrics
+            col1, col2, col3 = st.columns(3)
+            col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
+            col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
+            col3.metric("🌿 NDVI Index", f"{latest['NDVI_index']}")
+
+            col4, col5, col6 = st.columns(3)
+            col4.metric("☀️ Sunlight (hrs)", f"{latest['sunlight_hours']}")
+            col5.metric("☔ Rainfall (mm)", f"{latest['rainfall_mm']}")
+            col6.metric("💨 Humidity (%)", f"{latest['humidity_%']}")
+
+            st.markdown("### 🧾 Most Recent Sensor Data")
+            st.dataframe(latest.to_frame().T)
+
+            # Optional: Map
+            if not pd.isna(latest['latitude']) and not pd.isna(latest['longitude']):
+                st.map(pd.DataFrame({
+                    'lat': [latest['latitude']],
+                    'lon': [latest['longitude']]
+                }))
+        else:
+            st.warning("⚠️ Failed to load live data.")
     except Exception as e:
-        st.error(f"Error fetching live data: {e}")
+        st.error(f"❌ Error fetching live data: {e}")
+
 
 
 import streamlit.web as stweb

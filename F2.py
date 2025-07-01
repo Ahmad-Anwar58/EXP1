@@ -463,3 +463,45 @@ elif section == "💬 AgriTech Chatbot 🤖":
     if user_message:
         reply = get_chatbot_response(user_message)
         st.markdown(f"**Bot:** {reply}")
+
+
+import streamlit.web as stweb
+from urllib.parse import urlparse
+import json
+
+# ✅ Secure Streamlit POST endpoint for real-time data reception
+if stweb.server._is_running_with_streamlit:
+    from streamlit.runtime.scriptrunner import get_script_run_ctx
+    from streamlit.web.server.websocket_headers import _get_websocket_headers
+
+    from streamlit.web.server import Server
+    from fastapi import Request
+    from starlette.responses import JSONResponse
+
+    @Server.get_current()._app.post("/send-data")
+    async def receive_data(request: Request):
+        try:
+            body = await request.body()
+            data = json.loads(body)
+
+            # 🔐 API key check
+            auth_header = request.headers.get("authorization", "")
+            token = auth_header.replace("Bearer ", "").strip()
+            if token != st.secrets["API_KEY"]:
+                return JSONResponse({"error": "Unauthorized"}, status_code=401)
+
+            # ✅ Load & save incoming data to CSV
+            df_new = pd.DataFrame([data])
+            csv_path = "Data.csv"
+
+            if os.path.exists(csv_path):
+                df_existing = pd.read_csv(csv_path)
+                df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+            else:
+                df_combined = df_new
+
+            df_combined.to_csv(csv_path, index=False)
+            return JSONResponse({"message": "Data saved to CSV"}, status_code=200)
+
+        except Exception as e:
+            return JSONResponse({"error": str(e)}, status_code=500)

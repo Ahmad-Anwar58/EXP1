@@ -98,9 +98,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Load data
-@st.cache_data
 def load_data():
-    df = pd.read_csv("Data.csv")
+    df = pd.read_csv("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/Data.csv")
     df['sowing_date'] = pd.to_datetime(df['sowing_date'])
     df['harvest_date'] = pd.to_datetime(df['harvest_date'])
     df['timestamp'] = pd.to_datetime(df['timestamp'])

@@ -472,7 +472,7 @@ elif section == "📡 Live Sensor Data":
     import requests
 
     try:
-        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/Data.csv")
+        response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/real_time_data.csv")
         if response.status_code == 200:
             from io import StringIO
             df_live = pd.read_csv(StringIO(response.text))

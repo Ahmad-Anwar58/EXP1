@@ -504,3 +504,13 @@ if stweb.server._is_running_with_streamlit:
 
         except Exception as e:
             return JSONResponse({"error": str(e)}, status_code=500)
+
+import streamlit as st
+import json
+
+if "send-data" in st.query_params:
+    # Streamlit receives forwarded data here
+    payload = st.query_params["send-data"]
+    st.success("📡 Received Realtime Data")
+    st.json(payload)
+

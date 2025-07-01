@@ -499,28 +499,40 @@ elif section == "📊 Dashboard":
 
 #Chatbot for help
 elif section == "💬 AgriTech Chatbot 🤖":
-    st.title("🤖 Smart AgriTech Chatbot")
-    st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")
+    st.title("🤖 AgriGenius – Smart Agriculture Assistant")
+    st.caption("Ask me anything about farming, irrigation, crop cycles, or agricultural schemes!")
 
-    import json
+    # Import your two external modules (chat1.py and chat2.py)
+    from chat1 import fetch_website_content, extract_pdf_text, initialize_vector_store
+    from chat2 import llm, setup_retrieval_qa
 
-    @st.cache_data
-    def load_faq():
-        with open("faq.json", "r") as f:
-            return json.load(f)
+    @st.cache_resource(show_spinner="🔄 Loading AgriGenius... please wait")
+    def setup_agriculture_chatbot():
+        # Source content
+        urls = ["https://mospi.gov.in/4-agricultural-statistics"]
+        pdf_files = ["Data/Farming Schemes.pdf", "Data/farmerbook.pdf"]
 
-    faq_data = load_faq()
+        website_contents = [fetch_website_content(url) for url in urls]
+        pdf_texts = [extract_pdf_text(file) for file in pdf_files]
+        all_contents = website_contents + pdf_texts
 
-    def get_chatbot_response(user_input):
-        for item in faq_data:
-            if item['question'].lower() in user_input.lower():
-                return item['answer']
-        return "🤖 Sorry, I couldn't find an answer to that question."
+        # Vector store setup
+        db = initialize_vector_store(all_contents)
 
-    user_message = st.text_input("You:", key="user_input")
-    if user_message:
-        reply = get_chatbot_response(user_message)
-        st.markdown(f"**Bot:** {reply}")
+        # Build the RetrievalQA chain
+        chain = setup_retrieval_qa(db)
+        return chain
+
+    chain = setup_agriculture_chatbot()
+
+    user_question = st.text_input("You:", key="chat_input")
+    if user_question:
+        with st.spinner("🤖 Thinking..."):
+            try:
+                result = chain(user_question)
+                st.markdown(f"<div class='agri-chat-reply'><strong>AgriGenius:</strong> {result['result']}</div>", unsafe_allow_html=True)
+            except Exception as e:
+                st.error(f"❌ Error: {e}")
 
 # 6. Live Sensor Data Monitor
 elif section == "📡 Live Sensor Data":

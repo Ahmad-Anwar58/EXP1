@@ -1,68 +1,65 @@
 import requests
 import random
 import time
+import pandas as pd
 from datetime import datetime
-import uuid
+import os
+from github import Github
 
-# === Configuration ===
-FLASK_URL = "http://127.0.0.1:5000/receive-data"  # or replace with your actual server IP
-API_KEY = "BSBACropTool_2025_secret"  # 🔐 Replace if your Streamlit secret is different
+# ========== SIMULATION CONFIG ==========
+FLASK_URL = "http://127.0.0.1:5000/receive-data"  # Local Flask server
+GITHUB_TOKEN = "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"  # 🔐 Your GitHub token
+REPO_NAME = "Ahmad-Anwar58/EXP1"
+BRANCH = "main"
+CSV_FILENAME = "real_time_data.csv"
+API_KEY = "BSBACropTool_2025_secret"
 
-# === Crop & Irrigation/Fertilizer Options ===
-CROPS = ["Wheat", "Maize", "Rice", "Sugarcane", "Cotton"]
-IRRIGATION = ["Drip", "Flood", "Sprinkler"]
-FERTILIZER = ["Organic", "Synthetic", "Mixed"]
-DISEASE_STATUS = ["Healthy", "Diseased", "Recovered"]
-
-# === Sensor Data Generator ===
+# ========== SENSOR FIELDS ==========
 def generate_sensor_data():
-    now = datetime.now()
-    sowing_date = now.replace(month=max(1, now.month - 2))  # 2 months ago
-    harvest_date = now.replace(month=min(12, now.month + 2))  # 2 months later
-    total_days = (harvest_date - sowing_date).days
-
-    data = {
-        "farm_id": random.randint(1000, 9999),
-        "crop_type": random.choice(CROPS),
-        "soil_moisture_%": round(random.uniform(20, 80), 2),
-        "soil_pH": round(random.uniform(5.5, 8.0), 2),
+    return {
+        "sensor_id": random.randint(1000, 9999),
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "soil_moisture_%": round(random.uniform(10, 60), 2),
+        "soil_pH": round(random.uniform(5.5, 8.5), 2),
         "temperature_C": round(random.uniform(15, 45), 2),
-        "rainfall_mm": round(random.uniform(0, 50), 2),
-        "humidity_%": round(random.uniform(20, 100), 2),
+        "rainfall_mm": round(random.uniform(0, 20), 2),
+        "humidity_%": round(random.uniform(30, 90), 2),
         "sunlight_hours": round(random.uniform(4, 12), 2),
-        "irrigation_type": random.choice(IRRIGATION),
-        "fertilizer_type": random.choice(FERTILIZER),
-        "pesticide_usage_ml": round(random.uniform(50, 200), 2),
-        "sowing_date": sowing_date.strftime("%Y-%m-%d"),
-        "harvest_date": harvest_date.strftime("%Y-%m-%d"),
-        "total_days": total_days,
-        "yield_kg_per_hectare": round(random.uniform(2000, 7000), 2),
-        "sensor_id": str(uuid.uuid4())[:8],
-        "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
-        "latitude": round(random.uniform(30.0, 31.5), 6),
-        "longitude": round(random.uniform(70.0, 74.0), 6),
-        "NDVI_index": round(random.uniform(0.2, 0.9), 2),
-        "crop_disease_status": random.choice(DISEASE_STATUS)
+        "NDVI_index": round(random.uniform(0.1, 0.9), 2),
+        "latitude": 31.5204,
+        "longitude": 74.3587
     }
-    return data
 
-# === Send Loop ===
-def start_simulation():
-    print("🚀 Starting real-time sensor data simulation...\n")
-    while True:
-        payload = generate_sensor_data()
-        try:
-            response = requests.post(
-                FLASK_URL,
-                json=payload,
-                headers={"Authorization": f"Bearer {API_KEY}"}
-            )
-            print(f"✅ Sent at {payload['timestamp']} | Status: {response.status_code}")
-        except Exception as e:
-            print(f"❌ Failed to send data: {e}")
-        
-        time.sleep(10)  # Wait 10 seconds before sending next reading
+# ========== PUSH TO GITHUB ==========
+def push_to_github(data_dict):
+    g = Github(GITHUB_TOKEN)
+    repo = g.get_repo(REPO_NAME)
 
-# === Entry Point ===
+    try:
+        contents = repo.get_contents(CSV_FILENAME, ref=BRANCH)
+        csv_data = pd.read_csv(contents.download_url)
+        df = pd.concat([csv_data, pd.DataFrame([data_dict])], ignore_index=True)
+        new_csv = df.to_csv(index=False)
+        repo.update_file(contents.path, "🔄 Update real_time_data.csv with new sensor values", new_csv, contents.sha, branch=BRANCH)
+    except Exception as e:
+        # File might not exist, so create it
+        df = pd.DataFrame([data_dict])
+        repo.create_file(CSV_FILENAME, "🚀 Create real_time_data.csv with initial sensor data", df.to_csv(index=False), branch=BRANCH)
+
+# ========== SEND TO FLASK ==========
+def send_to_flask(data_dict):
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    response = requests.post(FLASK_URL, json=data_dict, headers=headers)
+    print("Flask Response:", response.status_code, response.text)
+
+# ========== MAIN LOOP ==========
 if __name__ == "__main__":
-    start_simulation()
+    while True:
+        sensor_data = generate_sensor_data()
+        print("Sending Data:", sensor_data)
+
+        send_to_flask(sensor_data)
+        push_to_github(sensor_data)
+
+        print("✅ Data sent to Flask and GitHub\n")
+        time.sleep(60)  # Every 1 minute

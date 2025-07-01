@@ -1,0 +1,2 @@
+sensor_id,timestamp,soil_moisture_%,soil_pH,temperature_C,rainfall_mm,humidity_%,sunlight_hours,NDVI_index,latitude,longitude
+7369,2025-07-02 00:55:08,52.75,7.31,39.51,1.63,80.27,4.23,0.15,31.5204,74.3587

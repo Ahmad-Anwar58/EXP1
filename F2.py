@@ -467,42 +467,45 @@ elif section == "💬 AgriTech Chatbot 🤖":
 # Real time sensor data
 elif section == "📡 Live Sensor Data":
     st.title("📡 Live Sensor Data Monitor")
-    st.markdown('<meta http-equiv="refresh" content="10">', unsafe_allow_html=True)
+    st.markdown('<meta http-equiv="refresh" content="60">', unsafe_allow_html=True)  # Auto-refresh every 60 seconds
 
     import requests
+    from io import StringIO
 
-   try:
-    response = requests.get("https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv")
-    if response.status_code == 200:
-        from io import StringIO
-        df_live = pd.read_csv(StringIO(response.text))
+    try:
+        url = "https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv"
+        response = requests.get(url)
 
-        df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
-        df_live = df_live.sort_values(by="timestamp", ascending=False)
-        latest = df_live.iloc[0]
+        if response.status_code == 200:
+            df_live = pd.read_csv(StringIO(response.text))
 
-        col1, col2, col3 = st.columns(3)
-        col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
-        col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
-        col3.metric("🌿 NDVI Index", f"{latest['NDVI_index']}")
+            df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
+            df_live = df_live.sort_values(by="timestamp", ascending=False)
+            latest = df_live.iloc[0]
 
-        col4, col5, col6 = st.columns(3)
-        col4.metric("☀️ Sunlight (hrs)", f"{latest['sunlight_hours']}")
-        col5.metric("☔ Rainfall (mm)", f"{latest['rainfall_mm']}")
-        col6.metric("💨 Humidity (%)", f"{latest['humidity_%']}")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("🌡️ Temperature (°C)", f"{latest['temperature_C']}")
+            col2.metric("💧 Soil Moisture (%)", f"{latest['soil_moisture_%']}")
+            col3.metric("🌿 NDVI Index", f"{latest['NDVI_index']}")
 
-        st.markdown("### 🧾 Most Recent Sensor Data")
-        st.dataframe(latest.to_frame().T)
+            col4, col5, col6 = st.columns(3)
+            col4.metric("☀️ Sunlight (hrs)", f"{latest['sunlight_hours']}")
+            col5.metric("☔ Rainfall (mm)", f"{latest['rainfall_mm']}")
+            col6.metric("💨 Humidity (%)", f"{latest['humidity_%']}")
 
-        if not pd.isna(latest['latitude']) and not pd.isna(latest['longitude']):
-            st.map(pd.DataFrame({
-                'lat': [latest['latitude']],
-                'lon': [latest['longitude']]
-            }))
-    else:
-        st.warning("⚠️ Failed to load live data.")
-except Exception as e:
-    st.error(f"❌ Error fetching live data: {e}")
+            st.markdown("### 🧾 Most Recent Sensor Data")
+            st.dataframe(latest.to_frame().T)
+
+            if not pd.isna(latest['latitude']) and not pd.isna(latest['longitude']):
+                st.map(pd.DataFrame({
+                    'lat': [latest['latitude']],
+                    'lon': [latest['longitude']]
+                }))
+        else:
+            st.warning("⚠️ Failed to load live sensor data from GitHub.")
+    except Exception as e:
+        st.error(f"❌ Error fetching sensor data: {e}")
+
 
 
 

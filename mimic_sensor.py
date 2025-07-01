@@ -62,4 +62,4 @@ if __name__ == "__main__":
         push_to_github(sensor_data)
 
         print("✅ Data sent to Flask and GitHub\n")
-        time.sleep(60)  # Every 1 minute
+        time.sleep(1800)

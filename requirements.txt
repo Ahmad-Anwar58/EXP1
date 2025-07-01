@@ -9,6 +9,7 @@ plotly
 seaborn
 openpyxl
 requests
+PyPDF2
 
 # Flask API support
 flask

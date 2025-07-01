@@ -33,6 +33,7 @@ def generate_sensor_data():
 # ========== PUSH TO GITHUB ==========
 def push_to_github(data_dict):
     g = Github(GITHUB_TOKEN)
+    print("🔐 Authenticated as:", g.get_user().login)
     repo = g.get_repo(REPO_NAME)
 
     try:

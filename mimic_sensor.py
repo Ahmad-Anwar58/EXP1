@@ -56,6 +56,38 @@ def send_to_flask(data_dict):
     response = requests.post(FLASK_URL, json=data_dict, headers=headers)
     print("Flask Response:", response.status_code, response.text)
 
+
+def push_to_github(data_dict):
+    g = Github(GITHUB_TOKEN)
+    print("🔐 Authenticated as:", g.get_user().login)
+    repo = g.get_repo(REPO_NAME)
+
+    try:
+        print("📥 Fetching file contents...")
+        contents = repo.get_contents(CSV_FILENAME, ref=BRANCH)
+        print("✅ File found in GitHub repo.")
+
+        print("📊 Reading existing CSV...")
+        csv_data = pd.read_csv(contents.download_url)
+
+        print("➕ Appending new data...")
+        df = pd.concat([csv_data, pd.DataFrame([data_dict])], ignore_index=True)
+        new_csv = df.to_csv(index=False)
+
+        print("⬆️ Updating file on GitHub...")
+        repo.update_file(contents.path, "🔄 Update real_time_data.csv with new sensor values", new_csv, contents.sha, branch=BRANCH)
+        print("✅ File successfully updated on GitHub.")
+
+    except Exception as e:
+        print("⚠️ Exception caught:", str(e))
+        print("📄 File not found or error occurred, creating new one instead...")
+
+        df = pd.DataFrame([data_dict])
+        csv_content = df.to_csv(index=False)
+
+        repo.create_file(CSV_FILENAME, "🚀 Create real_time_data.csv with initial sensor data", csv_content, branch=BRANCH)
+        print("✅ New file created successfully on GitHub.")
+
 # ========== MAIN LOOP ==========
 if __name__ == "__main__":
     while True:

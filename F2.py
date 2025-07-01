@@ -151,6 +151,7 @@ with st.sidebar:
         "💰 ROI Calculator",
         "📊 Dashboard",
         "💬 AgriTech Chatbot 🤖"
+        "📡 Live Sensor Data"
     ]
     section = st.radio("", menu_items, index=0)
 

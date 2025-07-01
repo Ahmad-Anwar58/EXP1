@@ -7,3 +7,5 @@ joblib
 plotly
 seaborn
 openpyxl
+flask
+requests

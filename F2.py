@@ -451,6 +451,53 @@ elif section == "💰 ROI Calculator":
     st.write(f"**Total Investment:** PKR {invest * acres:,.0f}")
     st.write(f"**Total Profit:** PKR {profit * acres:,.0f}")
 
+# 5. Dashboard
+elif section == "📊 Dashboard":
+    st.title("📊 Smart Agriculture Dashboard")
+    st.subheader("Live Sensor-Based Insights")
+
+    try:
+        # Load live sensor data
+        df_live = load_live_data()
+        df_live_recent = df_live.head(24).sort_values(by="timestamp")  # Last 24 readings
+        df_live_recent['timestamp'] = df_live_recent['timestamp'].dt.strftime('%H:%M:%S')
+
+        # First Row: Temp & Humidity + Moisture & Rain
+        col1, col2 = st.columns(2)
+
+        with col1:
+            fig1 = px.line(df_live_recent, x="timestamp", y=["temperature_C", "humidity_%"],
+                           title="🌡️ Temperature & 💨 Humidity Over Time", markers=True)
+            fig1.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            st.plotly_chart(fig1, use_container_width=True)
+
+        with col2:
+            fig2 = px.line(df_live_recent, x="timestamp", y=["soil_moisture_%", "rainfall_mm"],
+                           title="💧 Moisture & ☔ Rainfall Trends", markers=True)
+            fig2.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            st.plotly_chart(fig2, use_container_width=True)
+
+        # Second Row: NDVI vs Sunlight + Soil pH vs Moisture
+        col3, col4 = st.columns(2)
+
+        with col3:
+            fig3 = px.scatter(df_live_recent, x="sunlight_hours", y="NDVI_index",
+                              size="temperature_C", color="soil_moisture_%",
+                              title="🌿 NDVI vs ☀️ Sunlight", size_max=15)
+            fig3.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            st.plotly_chart(fig3, use_container_width=True)
+
+        with col4:
+            fig4 = px.scatter(df_live_recent, x="soil_pH", y="soil_moisture_%",
+                              color="rainfall_mm", size="humidity_%",
+                              title="🧪 Soil pH vs Moisture", size_max=15)
+            fig4.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            st.plotly_chart(fig4, use_container_width=True)
+
+    except Exception as e:
+        st.error(f"❌ Unable to load live dashboard graphs: {e}")
+
+#Chatbot for help
 elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 Smart AgriTech Chatbot")
     st.caption("Ask about crop schedules, irrigation, or fertilizer guidance.")

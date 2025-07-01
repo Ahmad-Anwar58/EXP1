@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import json
 
-app = Flask(CropIq)
+app = Flask("CropIq")
 
 # Replace this with the actual endpoint you’ll define in Streamlit
 STREAMLIT_URL = "https://testit11.streamlit.app/send-data"

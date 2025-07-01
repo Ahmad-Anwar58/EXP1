@@ -10,6 +10,8 @@ seaborn
 openpyxl
 requests
 PyPDF2
+langchain-community
+
 
 # Flask API support
 flask

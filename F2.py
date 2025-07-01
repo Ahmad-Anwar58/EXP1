@@ -514,3 +514,28 @@ if "send-data" in st.query_params:
     st.success("📡 Received Realtime Data")
     st.json(payload)
 
+import streamlit as st
+import json
+
+# Add a hidden route/page to show live Flask-posted data
+st.experimental_singleton.clear()  # clear cache for testing
+
+if st.requested_url and st.requested_url.endswith("/send-data"):
+    st.title("📡 Real-Time Sensor Data Received")
+
+    # Read raw POST data from Flask
+    if st.requested_method == "POST":
+        try:
+            payload = st.get_json()
+            st.success("Data received successfully from Flask!")
+            st.json(payload)
+
+            # (Optional) Save to CSV
+            df = pd.DataFrame([payload])
+            df.to_csv("live_data_log.csv", mode="a", header=not pd.io.common.file_exists("live_data_log.csv"), index=False)
+
+        except Exception as e:
+            st.error(f"Error processing data: {e}")
+    else:
+        st.warning("This page only accepts POST requests from Flask.")
+

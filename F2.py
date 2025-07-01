@@ -509,7 +509,7 @@ elif section == "💬 AgriTech Chatbot 🤖":
     @st.cache_resource(show_spinner="🔄 Loading AgriGenius... please wait")
     def setup_agriculture_chatbot():
         # Source content
-        urls = ["https://mospi.gov.in/4-agricultural-statistics"]
+        faqs = ["faq_data.json"]
         pdf_files = ["Data/Farming Schemes.pdf", "Data/farmerbook.pdf"]
 
         website_contents = [fetch_website_content(url) for url in urls]

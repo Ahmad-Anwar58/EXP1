@@ -497,24 +497,29 @@ elif section == "📊 Dashboard":
     except Exception as e:
         st.error(f"❌ Unable to load live dashboard graphs: {e}")
 
-#Chatbot for help
+
+# Chatbot for help
 elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 AgriGenius – Smart Agriculture Assistant")
     st.caption("Ask me anything about farming, irrigation, crop cycles, or agricultural schemes!")
 
-    # Import your two external modules (chat1.py and chat2.py)
+    # Import your external modules
     from chat1 import fetch_website_content, extract_pdf_text, initialize_vector_store
     from chat2 import llm, setup_retrieval_qa
 
     @st.cache_resource(show_spinner="🔄 Loading AgriGenius... please wait")
     def setup_agriculture_chatbot():
-        # Source content
-        faqs = ["faq.json"]
+        # Define sources
+        # NOTE: Commenting this because the website is currently unreachable
+        # urls = ["https://mospi.gov.in/4-agricultural-statistics"]
         pdf_files = ["Data/Farming Schemes.pdf", "Data/farmerbook.pdf"]
 
-        website_contents = [fetch_website_content(url) for url in urls]
+        # Skip website content if it's failing
+        # website_contents = [fetch_website_content(url) for url in urls]
         pdf_texts = [extract_pdf_text(file) for file in pdf_files]
-        all_contents = website_contents + pdf_texts
+
+        # Use only PDF contents for now
+        all_contents = pdf_texts  # + website_contents (optional if DNS works later)
 
         # Vector store setup
         db = initialize_vector_store(all_contents)
@@ -530,9 +535,13 @@ elif section == "💬 AgriTech Chatbot 🤖":
         with st.spinner("🤖 Thinking..."):
             try:
                 result = chain(user_question)
-                st.markdown(f"<div class='agri-chat-reply'><strong>AgriGenius:</strong> {result['result']}</div>", unsafe_allow_html=True)
+                st.markdown(
+                    f"<div class='agri-chat-reply'><strong>AgriGenius:</strong> {result['result']}</div>",
+                    unsafe_allow_html=True
+                )
             except Exception as e:
                 st.error(f"❌ Error: {e}")
+
 
 # 6. Live Sensor Data Monitor
 elif section == "📡 Live Sensor Data":

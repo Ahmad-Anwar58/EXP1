@@ -12,6 +12,8 @@ requests
 PyPDF2
 langchain-community
 langchain-together
+sentence-transformers
+
 
 # Flask API support
 flask

@@ -499,6 +499,7 @@ elif section == "📊 Dashboard":
 
 
 # Chatbot for help
+# Chatbot for help
 elif section == "💬 AgriTech Chatbot 🤖":
     st.title("🤖 AgriGenius – Smart Agriculture Assistant")
     st.caption("Ask me anything about farming, irrigation, crop cycles, or agricultural schemes!")
@@ -510,12 +511,7 @@ elif section == "💬 AgriTech Chatbot 🤖":
     @st.cache_resource(show_spinner="🔄 Loading AgriGenius... please wait")
     def setup_agriculture_chatbot():
         # Define sources
-        # NOTE: Commenting this because the website is currently unreachable
-        # urls = ["https://mospi.gov.in/4-agricultural-statistics"]
-        pdf_files = ["Data/Farming Schemes.pdf", "Data/farmerbook.pdf"]
-
-        # Skip website content if it's failing
-        # website_contents = [fetch_website_content(url) for url in urls]
+        pdf_files = ["Farming Schemes.pdf", "farmerbook.pdf"]
         pdf_texts = [extract_pdf_text(file) for file in pdf_files]
 
         # Use only PDF contents for now
@@ -541,6 +537,7 @@ elif section == "💬 AgriTech Chatbot 🤖":
                 )
             except Exception as e:
                 st.error(f"❌ Error: {e}")
+
 
 
 # 6. Live Sensor Data Monitor

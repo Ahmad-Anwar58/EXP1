@@ -4,12 +4,13 @@ from langchain.prompts import PromptTemplate
 from langchain_together import ChatTogether
 
 llm = ChatTogether(
-    model="meta-llama/Llama-3-8b-instruct", 
+    model="mistralai/Mixtral-8x7B-Instruct-v0.1",  
     temperature=0.7,
     max_tokens=512,
     top_p=0.9,
-    together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"  # ✅ Key placed correctly
+    together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"
 )
+
 
 
 # Set up the retrieval QA chain

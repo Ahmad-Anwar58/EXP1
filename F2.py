@@ -511,7 +511,7 @@ elif section == "💬 AgriTech Chatbot 🤖":
     @st.cache_resource(show_spinner="🔄 Loading AgriGenius... please wait")
     def setup_agriculture_chatbot():
         # Define sources
-        pdf_files = ["Farming Schemes.pdf", "farmerbook.pdf"]
+        pdf_files = ["Agriculture-Pakistan.pdf", "Climate-smart.pdf", "weather.pdf"]
         pdf_texts = [extract_pdf_text(file) for file in pdf_files]
 
         # Use only PDF contents for now

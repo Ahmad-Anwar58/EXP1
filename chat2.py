@@ -8,7 +8,7 @@ llm = Together(
     max_tokens=512,
     temperature=0.1,
     top_k=1,
-    together_api_key="YOUR_Together_API_KEY"
+    together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"
 )
 
 # Set up the retrieval QA chain

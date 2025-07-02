@@ -11,7 +11,7 @@ openpyxl
 requests
 PyPDF2
 langchain-community
-
+langchain-together
 
 # Flask API support
 flask

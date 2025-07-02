@@ -1,15 +1,16 @@
 from langchain_together import Together
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+from langchain_together import ChatTogether
 
-# Initialize the language model
-llm = Together(
-    model="meta-llama/Llama-2-70b-chat-hf",
+llm = ChatTogether(
+    model="meta-llama/Llama-3-8b-instruct", 
+    temperature=0.7,
     max_tokens=512,
-    temperature=0.1,
-    top_k=1,
-    together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"
+    top_p=0.9,
+    together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"  # ✅ Key placed correctly
 )
+
 
 # Set up the retrieval QA chain
 def setup_retrieval_qa(db):

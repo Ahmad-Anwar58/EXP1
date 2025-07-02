@@ -12,9 +12,9 @@ requests
 PyPDF2
 langchain-community
 langchain-together
-sentence-transformers
+sentence-transformers==2.7.0
 tf-keras
-sentence-transformers
+
 
 
 # Flask API support

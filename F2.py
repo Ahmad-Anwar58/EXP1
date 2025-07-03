@@ -10,7 +10,7 @@ import base64
 import streamlit.components.v1 as components
 import requests
 from io import StringIO
-
+import plotly.graph_objects as go
 
 @st.cache_data(ttl=60)
 def load_live_data():

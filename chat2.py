@@ -3,6 +3,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_together import ChatTogether
 
+# ✅ Initialize LLM
 llm = ChatTogether(
     model="mistralai/Mixtral-8x7B-Instruct-v0.1",  
     temperature=0.7,
@@ -11,30 +12,42 @@ llm = ChatTogether(
     together_api_key="cf7143ee51239b6b1cb5438e15e364747f3270f4602012fa69f018224f514720"
 )
 
-
-
-# Set up the retrieval QA chain
+# ✅ Set up the Retrieval QA chain
 def setup_retrieval_qa(db):
-    retriever = db.as_retriever(similarity_score_threshold=0.6)
+    retriever = db.as_retriever(search_type="similarity", search_kwargs={"k": 4})  # ← better than similarity_score_threshold
 
-    # Define the prompt template
-    prompt_template = """ Your name is AgriGenius, Please answer questions related to Agriculture. Try explaining in simple words. Answer in less than 100 words. If you don't know the answer, simply respond with 'Don't know.'
-     CONTEXT: {context}
-     QUESTION: {question}"""
+    prompt_template = """
+    [INST]
+    You are AgriGenius, an agriculture expert.
+    Answer the following farming-related question in simple, clear, and helpful terms using the context.
+    Keep it under 100 words.
+    If the answer is unknown, just say "Don't know."
 
-    PROMPT = PromptTemplate(template=f"[INST] {prompt_template} [/INST]", input_variables=["context", "question"])
+    CONTEXT: {context}
+    QUESTION: {question}
+    [/INST]
+    """
 
-    # Initialize the RetrievalQA chain
+    prompt = PromptTemplate(
+        template=prompt_template,
+        input_variables=["context", "question"]
+    )
+
     chain = RetrievalQA.from_chain_type(
         llm=llm,
-        chain_type='stuff',
+        chain_type="stuff",
         retriever=retriever,
-        input_key='query',
+        input_key="query",
         return_source_documents=True,
-        chain_type_kwargs={"prompt": PROMPT},
-        verbose=True
+        chain_type_kwargs={"prompt": prompt},
+        verbose=False  # Turn off unless debugging
     )
     return chain
 
+# ✅ Smart query function to get short response
 def smart_query(chain, prompt):
-    return chain(prompt)["result"]
+    try:
+        result = chain.run(prompt)
+        return result.strip()
+    except Exception as e:
+        return f"🤖 Error: {str(e)}"

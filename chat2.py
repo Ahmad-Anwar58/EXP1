@@ -35,3 +35,6 @@ def setup_retrieval_qa(db):
         verbose=True
     )
     return chain
+
+def smart_query(chain, prompt):
+    return chain(prompt)["result"]

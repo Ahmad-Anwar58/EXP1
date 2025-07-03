@@ -472,6 +472,7 @@ elif section == "📊 Dashboard":
     if st.button("🔁 Update Dashboard"):
         st.session_state['refresh_dashboard'] = True
 
+    # ✅ Run only on first load or button click
     if st.session_state.get('refresh_dashboard', True):
         try:
             df_live = load_live_data()
@@ -480,44 +481,41 @@ elif section == "📊 Dashboard":
             df_live['time_str'] = df_live['timestamp'].dt.strftime('%H:%M:%S')
             latest = df_live.iloc[-1]
 
-            # Define a helper to call smart chatbot under each chart
-            def get_ai_tip(prompt):
-                try:
-                    return smart_query(chain, prompt)
-                except:
-                    return "🤖 Unable to fetch recommendation."
-
-            ### Row 1: Soil Moisture & pH
+            # Row 1: Soil Moisture & Soil pH
             col1, col2 = st.columns(2)
-
             with col1:
                 fig1 = px.line(df_live, x='time_str', y='soil_moisture_%',
                                title='💧 Soil Moisture Over Time',
                                markers=True, line_shape='linear')
                 st.plotly_chart(fig1, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Soil moisture changed from {df_live['soil_moisture_%'].min():.1f}% to {df_live['soil_moisture_%'].max():.1f}% in last 5 hours. Suggest actions."))
+                trend = df_live['soil_moisture_%'].iloc[-1] - df_live['soil_moisture_%'].iloc[0]
+                prompt = f"Soil moisture changed by {trend:.2f}% over the last 5 hours. What should a farmer do?"
+                st.info("📢 " + smart_query(chain, prompt))
 
             with col2:
                 fig2 = px.area(df_live, x='time_str', y='soil_pH',
                                title='🧪 Soil pH Variation Over Time',
                                color_discrete_sequence=['#66c2a5'])
                 st.plotly_chart(fig2, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Soil pH ranged from {df_live['soil_pH'].min():.2f} to {df_live['soil_pH'].max():.2f}. Recommend actions for farmers."))
+                ph_change = df_live['soil_pH'].iloc[-1] - df_live['soil_pH'].iloc[0]
+                prompt = f"Soil pH changed by {ph_change:.2f} over time. Any recommendations for the farmer?"
+                st.info("📢 " + smart_query(chain, prompt))
 
-            ### Row 2: Temperature & Rainfall
+            # Row 2: Temperature & Rainfall
             col3, col4 = st.columns(2)
-
             with col3:
                 fig3 = px.bar(df_live, x='time_str', y='temperature_C',
                               title='🌡️ Temperature Over Time',
                               color='temperature_C', color_continuous_scale='thermal')
                 st.plotly_chart(fig3, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Temperature ranged from {df_live['temperature_C'].min():.1f}°C to {df_live['temperature_C'].max():.1f}°C. Any weather-related advice?"))
+                temp_delta = df_live['temperature_C'].iloc[-1] - df_live['temperature_C'].iloc[0]
+                prompt = f"Temperature changed by {temp_delta:.2f}°C. Should I worry about my crops?"
+                st.info("📢 " + smart_query(chain, prompt))
 
             with col4:
                 fig4 = go.Figure(data=[go.Candlestick(
                     x=df_live['time_str'],
-                    open=df_live['rainfall_mm'] - 0.5,
+                    open=df_live['rainfall_mm'] - 1,
                     high=df_live['rainfall_mm'] + 1.5,
                     low=df_live['rainfall_mm'] - 1.5,
                     close=df_live['rainfall_mm'],
@@ -528,35 +526,37 @@ elif section == "📊 Dashboard":
                                    xaxis_title='Time', yaxis_title='Rainfall (mm)',
                                    height=350)
                 st.plotly_chart(fig4, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Rainfall trend observed. Maximum: {df_live['rainfall_mm'].max():.2f} mm. Give irrigation strategy suggestion."))
 
-            ### Row 3: Humidity & Sunlight
+            # Row 3: Humidity & Sunlight
             col5, col6 = st.columns(2)
-
             with col5:
                 fig5 = px.line(df_live, x='time_str', y='humidity_%',
                                title='💨 Humidity Over Time',
                                markers=True, line_shape='spline',
                                color_discrete_sequence=['orange'])
                 st.plotly_chart(fig5, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Humidity ranged from {df_live['humidity_%'].min():.1f}% to {df_live['humidity_%'].max():.1f}%. How might it affect pest risk or irrigation?"))
+                hum_change = df_live['humidity_%'].iloc[-1] - df_live['humidity_%'].iloc[0]
+                prompt = f"Humidity changed by {hum_change:.2f}%. What crop risk or benefit might this cause?"
+                st.info("📢 " + smart_query(chain, prompt))
 
             with col6:
                 fig6 = px.area(df_live, x='time_str', y='sunlight_hours',
                                title='☀️ Sunlight Hours Over Time',
                                color_discrete_sequence=['#fdae61'])
                 st.plotly_chart(fig6, use_container_width=True)
-                st.markdown("🤖 " + get_ai_tip(f"Sunlight ranged from {df_live['sunlight_hours'].min():.1f} to {df_live['sunlight_hours'].max():.1f} hours. Provide photosynthesis-related advice."))
 
-            ### NDVI Line Chart
+            # NDVI Line Chart
             st.markdown("### 🌿 NDVI Index Over Time")
             fig7 = px.line(df_live, x='time_str', y='NDVI_index',
                            markers=True, title="NDVI Index Trend",
                            line_shape="linear", color_discrete_sequence=['green'])
             st.plotly_chart(fig7, use_container_width=True)
-            st.markdown("🤖 " + get_ai_tip(f"NDVI trend shows value {df_live['NDVI_index'].min():.2f} to {df_live['NDVI_index'].max():.2f}. Any vegetation health suggestions?"))
 
-            ### Radar Chart
+            ndvi_change = df_live['NDVI_index'].iloc[-1] - df_live['NDVI_index'].iloc[0]
+            prompt = f"The NDVI index changed by {ndvi_change:.2f} in the last 5 hours. What does this mean for crop health?"
+            st.info("📢 " + smart_query(chain, prompt))
+
+            # Radar Chart for Latest Reading
             st.markdown("### 🕸️ Latest Sensor Snapshot (Radar Chart)")
             radar_df = pd.DataFrame({
                 'Metric': ['Soil Moisture', 'Soil pH', 'Temperature', 'Rainfall',
@@ -587,12 +587,12 @@ elif section == "📊 Dashboard":
                 height=450
             )
             st.plotly_chart(fig_radar, use_container_width=True)
-            st.markdown("🤖 " + get_ai_tip("This is a combined radar chart of all metrics. Suggest what should a farmer focus on right now?"))
 
             st.session_state['refresh_dashboard'] = False
 
         except Exception as e:
             st.error(f"❌ Unable to load dashboard data: {e}")
+
 
 
 # Chatbot for help

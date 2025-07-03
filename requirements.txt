@@ -20,7 +20,7 @@ tf-keras
 # Flask API support
 flask
 
-# 🔍 Chatbot & AI Intelligence
+# Chatbot & AI Intelligence
 langchain
 langchain-community
 langchain-together

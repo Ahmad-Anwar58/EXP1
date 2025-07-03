@@ -454,48 +454,56 @@ elif section == "💰 ROI Calculator":
 # 5. Dashboard
 elif section == "📊 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
-    st.subheader("Live Sensor-Based Insights")
+    st.subheader("📡 Real-Time Sensor-Based Insights")
 
-    try:
-        # Load live sensor data
-        df_live = load_live_data()
-        df_live_recent = df_live.head(24).sort_values(by="timestamp")  # Last 24 readings
-        df_live_recent['timestamp'] = df_live_recent['timestamp'].dt.strftime('%H:%M:%S')
+    # 🔁 Manual refresh button
+    if st.button("🔁 Update Dashboard"):
+        st.session_state['refresh_dashboard'] = True
 
-        # First Row: Temp & Humidity + Moisture & Rain
-        col1, col2 = st.columns(2)
+    # Only run when button is pressed or on first visit
+    if st.session_state.get('refresh_dashboard', True):
 
-        with col1:
-            fig1 = px.line(df_live_recent, x="timestamp", y=["temperature_C", "humidity_%"],
-                           title="🌡️ Temperature & 💨 Humidity Over Time", markers=True)
-            fig1.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+        try:
+            # Load last 50 sensor records
+            df_live = load_live_data()
+            df_live = df_live.sort_values(by="timestamp", ascending=False).head(50)
+            df_live['timestamp'] = pd.to_datetime(df_live['timestamp'])
+
+            # === GRAPHS ===
+            fig1 = px.scatter(df_live, x="rainfall_mm", y="soil_moisture_%",
+                              title="💧 Soil Moisture vs. ☔ Rainfall",
+                              color="temperature_C", size="humidity_%")
             st.plotly_chart(fig1, use_container_width=True)
 
-        with col2:
-            fig2 = px.line(df_live_recent, x="timestamp", y=["soil_moisture_%", "rainfall_mm"],
-                           title="💧 Moisture & ☔ Rainfall Trends", markers=True)
-            fig2.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            fig2 = px.line(df_live.sort_values("timestamp"), x="timestamp", y="NDVI_index",
+                           title="🌿 NDVI Index Over Time", markers=True)
             st.plotly_chart(fig2, use_container_width=True)
 
-        # Second Row: NDVI vs Sunlight + Soil pH vs Moisture
-        col3, col4 = st.columns(2)
-
-        with col3:
-            fig3 = px.scatter(df_live_recent, x="sunlight_hours", y="NDVI_index",
-                              size="temperature_C", color="soil_moisture_%",
-                              title="🌿 NDVI vs ☀️ Sunlight", size_max=15)
-            fig3.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            fig3 = px.scatter(df_live, x="sunlight_hours", y="temperature_C",
+                              title="☀️ Sunlight Hours vs 🌡️ Temperature",
+                              color="NDVI_index", size="soil_moisture_%")
             st.plotly_chart(fig3, use_container_width=True)
 
-        with col4:
-            fig4 = px.scatter(df_live_recent, x="soil_pH", y="soil_moisture_%",
-                              color="rainfall_mm", size="humidity_%",
-                              title="🧪 Soil pH vs Moisture", size_max=15)
-            fig4.update_layout(height=300, margin=dict(t=40, b=20, l=10, r=10))
+            fig4 = px.histogram(df_live, x="soil_pH", nbins=10,
+                                title="🧪 Soil pH Distribution", color_discrete_sequence=["#8ecae6"])
             st.plotly_chart(fig4, use_container_width=True)
 
-    except Exception as e:
-        st.error(f"❌ Unable to load live dashboard graphs: {e}")
+            fig5 = px.scatter(df_live, x="temperature_C", y="humidity_%",
+                              title="🌡️ Temperature vs 💨 Humidity",
+                              color="soil_moisture_%", size="rainfall_mm")
+            st.plotly_chart(fig5, use_container_width=True)
+
+            if 'latitude' in df_live.columns and 'longitude' in df_live.columns:
+                df_map = df_live.dropna(subset=['latitude', 'longitude'])
+                st.markdown("### 🗺️ Sensor Location Map")
+                st.map(df_map[['latitude', 'longitude']])
+
+            # Clear refresh flag after run
+            st.session_state['refresh_dashboard'] = False
+
+        except Exception as e:
+            st.error(f"❌ Unable to load dashboard: {e}")
+
 
 
 # Chatbot for help

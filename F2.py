@@ -454,123 +454,125 @@ elif section == "💰 ROI Calculator":
 # 5. Dashboard
 elif section == "📊 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
-    st.subheader("Live Sensor Trends – Last 50 Sensor Readings")
+    st.subheader("📡 Real-Time Sensor-Based Insights")
 
-    import requests
-    from io import StringIO
-    import plotly.graph_objects as go
-
+    # ✅ Function to fetch live data from GitHub
     def load_live_data():
         url = "https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/real_time_data.csv"
         response = requests.get(url)
         if response.status_code == 200:
             df = pd.read_csv(StringIO(response.text))
             df['timestamp'] = pd.to_datetime(df['timestamp'])
-            df = df.sort_values(by="timestamp", ascending=False).head(50)
-            df = df.sort_values(by="timestamp")
             return df
         else:
-            raise ValueError("Failed to load data from GitHub")
+            raise ValueError("❌ Failed to load data from GitHub.")
 
-    try:
-        df_live = load_live_data()
-        df_live['time_str'] = df_live['timestamp'].dt.strftime('%H:%M:%S')
+    # ✅ Manual refresh button
+    if st.button("🔁 Update Dashboard"):
+        st.session_state['refresh_dashboard'] = True
 
-        # Row 1: Soil Moisture (Line) & Soil pH (Area)
-        col1, col2 = st.columns(2)
+    # ✅ Run only on first load or button click
+    if st.session_state.get('refresh_dashboard', True):
+        try:
+            df_live = load_live_data()
+            df_live = df_live.sort_values(by="timestamp", ascending=False).head(50)
+            df_live = df_live.sort_values(by="timestamp")
+            df_live['time_str'] = df_live['timestamp'].dt.strftime('%H:%M:%S')
 
-        with col1:
-            fig1 = px.line(df_live, x='time_str', y='soil_moisture_%',
-                           title='💧 Soil Moisture Over Time',
-                           markers=True, line_shape='linear')
-            st.plotly_chart(fig1, use_container_width=True)
+            # Row 1: Soil Moisture & Soil pH
+            col1, col2 = st.columns(2)
+            with col1:
+                fig1 = px.line(df_live, x='time_str', y='soil_moisture_%',
+                               title='💧 Soil Moisture Over Time',
+                               markers=True, line_shape='linear')
+                st.plotly_chart(fig1, use_container_width=True)
+            with col2:
+                fig2 = px.area(df_live, x='time_str', y='soil_pH',
+                               title='🧪 Soil pH Variation Over Time',
+                               color_discrete_sequence=['#66c2a5'])
+                st.plotly_chart(fig2, use_container_width=True)
 
-        with col2:
-            fig2 = px.area(df_live, x='time_str', y='soil_pH',
-                           title='🧪 Soil pH Variation Over Time',
-                           color_discrete_sequence=['#66c2a5'])
-            st.plotly_chart(fig2, use_container_width=True)
+            # Row 2: Temperature & Rainfall
+            col3, col4 = st.columns(2)
+            with col3:
+                fig3 = px.bar(df_live, x='time_str', y='temperature_C',
+                              title='🌡️ Temperature Over Time',
+                              color='temperature_C', color_continuous_scale='thermal')
+                st.plotly_chart(fig3, use_container_width=True)
+            with col4:
+                fig4 = go.Figure(data=[go.Candlestick(
+                    x=df_live['time_str'],
+                    open=df_live['rainfall_mm'] - 1,
+                    high=df_live['rainfall_mm'] + 1.5,
+                    low=df_live['rainfall_mm'] - 1.5,
+                    close=df_live['rainfall_mm'],
+                    increasing_line_color='blue',
+                    decreasing_line_color='lightblue'
+                )])
+                fig4.update_layout(title="☔ Rainfall Fluctuation (Pseudo Candlestick)",
+                                   xaxis_title='Time', yaxis_title='Rainfall (mm)',
+                                   height=350)
+                st.plotly_chart(fig4, use_container_width=True)
 
-        # Row 2: Temperature (Bar) & Rainfall (Candlestick Style)
-        col3, col4 = st.columns(2)
+            # Row 3: Humidity & Sunlight
+            col5, col6 = st.columns(2)
+            with col5:
+                fig5 = px.line(df_live, x='time_str', y='humidity_%',
+                               title='💨 Humidity Over Time',
+                               markers=True, line_shape='spline',
+                               color_discrete_sequence=['orange'])
+                st.plotly_chart(fig5, use_container_width=True)
+            with col6:
+                fig6 = px.area(df_live, x='time_str', y='sunlight_hours',
+                               title='☀️ Sunlight Hours Over Time',
+                               color_discrete_sequence=['#fdae61'])
+                st.plotly_chart(fig6, use_container_width=True)
 
-        with col3:
-            fig3 = px.bar(df_live, x='time_str', y='temperature_C',
-                          title='🌡️ Temperature Over Time',
-                          color='temperature_C', color_continuous_scale='thermal')
-            st.plotly_chart(fig3, use_container_width=True)
+            # NDVI Line Chart
+            st.markdown("### 🌿 NDVI Index Over Time")
+            fig7 = px.line(df_live, x='time_str', y='NDVI_index',
+                           markers=True, title="NDVI Index Trend",
+                           line_shape="linear", color_discrete_sequence=['green'])
+            st.plotly_chart(fig7, use_container_width=True)
 
-        with col4:
-            fig4 = go.Figure(data=[go.Candlestick(
-                x=df_live['time_str'],
-                open=df_live['rainfall_mm'] - 1,
-                high=df_live['rainfall_mm'] + 1.5,
-                low=df_live['rainfall_mm'] - 1.5,
-                close=df_live['rainfall_mm'],
-                increasing_line_color='blue', decreasing_line_color='lightblue'
-            )])
-            fig4.update_layout(title="☔ Rainfall Fluctuation (Pseudo Candlestick)",
-                               xaxis_title='Time', yaxis_title='Rainfall (mm)',
-                               height=350)
-            st.plotly_chart(fig4, use_container_width=True)
+            # Radar Chart for Latest Reading
+            st.markdown("### 🕸️ Latest Sensor Snapshot (Radar Chart)")
+            latest = df_live.iloc[-1]
+            radar_df = pd.DataFrame({
+                'Metric': ['Soil Moisture', 'Soil pH', 'Temperature', 'Rainfall',
+                           'Humidity', 'Sunlight', 'NDVI'],
+                'Value': [
+                    latest['soil_moisture_%'],
+                    latest['soil_pH'],
+                    latest['temperature_C'],
+                    latest['rainfall_mm'],
+                    latest['humidity_%'],
+                    latest['sunlight_hours'],
+                    latest['NDVI_index']
+                ]
+            })
 
-        # Row 3: Humidity (Line) & Sunlight (Area)
-        col5, col6 = st.columns(2)
+            fig_radar = go.Figure()
+            fig_radar.add_trace(go.Scatterpolar(
+                r=radar_df['Value'],
+                theta=radar_df['Metric'],
+                fill='toself',
+                name='Latest Reading',
+                line=dict(color='teal')
+            ))
+            fig_radar.update_layout(
+                polar=dict(radialaxis=dict(visible=True,
+                                           range=[0, max(radar_df['Value']) + 10])),
+                showlegend=False,
+                height=450
+            )
+            st.plotly_chart(fig_radar, use_container_width=True)
 
-        with col5:
-            fig5 = px.line(df_live, x='time_str', y='humidity_%',
-                           title='💨 Humidity Over Time',
-                           markers=True, line_shape='spline', color_discrete_sequence=['orange'])
-            st.plotly_chart(fig5, use_container_width=True)
+            # Reset the refresh flag
+            st.session_state['refresh_dashboard'] = False
 
-        with col6:
-            fig6 = px.area(df_live, x='time_str', y='sunlight_hours',
-                           title='☀️ Sunlight Hours Over Time',
-                           color_discrete_sequence=['#fdae61'])
-            st.plotly_chart(fig6, use_container_width=True)
-
-        # Center Chart: NDVI (simple line)
-        st.markdown("### 🌿 NDVI Index Over Time")
-        fig7 = px.line(df_live, x='time_str', y='NDVI_index',
-                       markers=True, title="NDVI Index Trend", line_shape="linear",
-                       color_discrete_sequence=['green'])
-        st.plotly_chart(fig7, use_container_width=True)
-
-        # Radar Chart: Last Entry Overview
-        st.markdown("### 🕸️ Latest Sensor Snapshot (Radar Chart)")
-
-        latest = df_live.iloc[-1]
-        radar_df = pd.DataFrame({
-            'Metric': ['Soil Moisture', 'Soil pH', 'Temperature', 'Rainfall',
-                       'Humidity', 'Sunlight', 'NDVI'],
-            'Value': [
-                latest['soil_moisture_%'],
-                latest['soil_pH'],
-                latest['temperature_C'],
-                latest['rainfall_mm'],
-                latest['humidity_%'],
-                latest['sunlight_hours'],
-                latest['NDVI_index']
-            ]
-        })
-
-        fig_radar = go.Figure()
-        fig_radar.add_trace(go.Scatterpolar(
-            r=radar_df['Value'],
-            theta=radar_df['Metric'],
-            fill='toself',
-            name='Latest Reading',
-            line=dict(color='teal')
-        ))
-        fig_radar.update_layout(
-            polar=dict(radialaxis=dict(visible=True, range=[0, max(radar_df['Value']) + 10])),
-            showlegend=False,
-            height=450
-        )
-        st.plotly_chart(fig_radar, use_container_width=True)
-
-    except Exception as e:
-        st.error(f"❌ Unable to load dashboard data: {e}")
+        except Exception as e:
+            st.error(f"❌ Unable to load dashboard data: {e}")
 
 
 

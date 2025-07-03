@@ -461,7 +461,7 @@ elif section == "📊 Dashboard":
     import plotly.graph_objects as go
 
     def load_live_data():
-        url = "https://raw.githubusercontent.com/Ahmad-Anwar58/cropiq-sensor-data/main/real_time_data.csv"
+        url = "https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/real_time_data.csv"
         response = requests.get(url)
         if response.status_code == 200:
             df = pd.read_csv(StringIO(response.text))

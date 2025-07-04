@@ -458,15 +458,16 @@ elif section == "📊 Dashboard":
     st.title("📊 Smart Agriculture Dashboard")
     st.subheader("📡 Real-Time Sensor-Based Insights")
 
+    from chat2 import smart_query, setup_retrieval_qa
+    from chat1 import extract_pdf_text, initialize_vector_store
+
     # ✅ Manual refresh
     if st.button("🔁 Update Dashboard"):
         st.session_state['refresh_dashboard'] = True
 
-    # ✅ Load chatbot chain for recommendations
+    # ✅ Load chatbot chain (cached)
     @st.cache_resource(show_spinner="🤖 Loading AgriGenius Engine...")
     def load_chatbot_chain():
-        from chat1 import extract_pdf_text, initialize_vector_store
-        from chat2 import setup_retrieval_qa
         pdf_files = ["Agriculture-Pakistan.pdf", "Climate-smart.pdf", "weather.pdf"]
         pdf_texts = [extract_pdf_text(file) for file in pdf_files]
         db = initialize_vector_store(pdf_texts)
@@ -474,7 +475,7 @@ elif section == "📊 Dashboard":
 
     chain = load_chatbot_chain()
 
-    # ✅ Load data from GitHub
+    # ✅ Load live sensor data
     def load_live_data():
         url = "https://raw.githubusercontent.com/Ahmad-Anwar58/EXP1/main/real_time_data.csv"
         response = requests.get(url)
@@ -487,55 +488,47 @@ elif section == "📊 Dashboard":
 
     if st.session_state.get('refresh_dashboard', True):
         try:
-            df_live = load_live_data()
-            df_live = df_live.sort_values(by="timestamp", ascending=False).head(50)
-            df_live = df_live.sort_values(by="timestamp")
+            df_live = load_live_data().sort_values(by="timestamp", ascending=False).head(50).sort_values(by="timestamp")
             df_live['time_str'] = df_live['timestamp'].dt.strftime('%H:%M:%S')
 
-            def recommend_insight(variable_name):
-                values = df_live[variable_name].values
+            # Recommendation logic
+            def recommend_insight(var):
+                values = df_live[var].values
                 delta = round(values[-1] - values[0], 2)
                 if abs(delta) < 0.1:
-                    return f"No significant change detected in {variable_name}."
+                    return f"No significant change detected in {var}."
                 trend = "increased" if delta > 0 else "decreased"
-                return f"{variable_name.replace('_', ' ').capitalize()} has {trend} by {abs(delta)} units in recent entries."
+                return f"{var.replace('_', ' ').capitalize()} has {trend} by {abs(delta)} units recently."
 
-            def agri_tip(variable_name):
-                prompt = f"Give short practical steps for a farmer to act if '{variable_name}' is fluctuating abnormally based on sensor data."
-                try:
-                    return smart_query(chain, prompt)
-                except:
-                    return "🤖 Unable to fetch recommendation."
+            def agri_tip(var):
+                prompt = f"Give short practical steps for a farmer to act if '{var}' is fluctuating abnormally based on sensor data."
+                return smart_query(chain, prompt)
 
-            # 🌱 Row 1: Soil Moisture + Soil pH
+            # Row 1: Soil Moisture & pH
             col1, col2 = st.columns(2)
             with col1:
-                fig1 = px.line(df_live, x='time_str', y='soil_moisture_%',
-                               title='💧 Soil Moisture Over Time', markers=True)
-                st.plotly_chart(fig1, use_container_width=True)
+                fig = px.line(df_live, x='time_str', y='soil_moisture_%', title='💧 Soil Moisture Over Time', markers=True)
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("soil_moisture_%"))
                 st.caption(f"🤖 {agri_tip('soil moisture')}")
 
             with col2:
-                fig2 = px.area(df_live, x='time_str', y='soil_pH',
-                               title='🧪 Soil pH Variation Over Time',
-                               color_discrete_sequence=['#66c2a5'])
-                st.plotly_chart(fig2, use_container_width=True)
+                fig = px.area(df_live, x='time_str', y='soil_pH', title='🧪 Soil pH Over Time', color_discrete_sequence=['#66c2a5'])
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("soil_pH"))
                 st.caption(f"🤖 {agri_tip('soil pH')}")
 
-            # 🌱 Row 2: Temperature + Rainfall
+            # Row 2: Temperature & Rainfall
             col3, col4 = st.columns(2)
             with col3:
-                fig3 = px.bar(df_live, x='time_str', y='temperature_C',
-                              title='🌡️ Temperature Over Time',
-                              color='temperature_C', color_continuous_scale='thermal')
-                st.plotly_chart(fig3, use_container_width=True)
+                fig = px.bar(df_live, x='time_str', y='temperature_C', title='🌡️ Temperature Over Time',
+                             color='temperature_C', color_continuous_scale='thermal')
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("temperature_C"))
                 st.caption(f"🤖 {agri_tip('temperature')}")
 
             with col4:
-                fig4 = go.Figure(data=[go.Candlestick(
+                fig = go.Figure(data=[go.Candlestick(
                     x=df_live['time_str'],
                     open=df_live['rainfall_mm'] - 0.5,
                     high=df_live['rainfall_mm'] + 1.0,
@@ -544,47 +537,40 @@ elif section == "📊 Dashboard":
                     increasing_line_color='blue',
                     decreasing_line_color='lightblue'
                 )])
-                fig4.update_layout(title="☔ Rainfall Fluctuation (Candlestick)",
-                                   xaxis_title='Time', yaxis_title='Rainfall (mm)',
-                                   height=350)
-                st.plotly_chart(fig4, use_container_width=True)
+                fig.update_layout(title="☔ Rainfall Fluctuation", height=350)
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("rainfall_mm"))
                 st.caption(f"🤖 {agri_tip('rainfall')}")
 
-            # 🌱 Row 3: Humidity + Sunlight
+            # Row 3: Humidity & Sunlight
             col5, col6 = st.columns(2)
             with col5:
-                fig5 = px.line(df_live, x='time_str', y='humidity_%',
-                               title='💨 Humidity Over Time',
-                               markers=True, line_shape='spline',
-                               color_discrete_sequence=['orange'])
-                st.plotly_chart(fig5, use_container_width=True)
+                fig = px.line(df_live, x='time_str', y='humidity_%', title='💨 Humidity Over Time',
+                              markers=True, line_shape='spline', color_discrete_sequence=['orange'])
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("humidity_%"))
                 st.caption(f"🤖 {agri_tip('humidity')}")
 
             with col6:
-                fig6 = px.area(df_live, x='time_str', y='sunlight_hours',
-                               title='☀️ Sunlight Hours Over Time',
-                               color_discrete_sequence=['#fdae61'])
-                st.plotly_chart(fig6, use_container_width=True)
+                fig = px.area(df_live, x='time_str', y='sunlight_hours', title='☀️ Sunlight Hours Over Time',
+                              color_discrete_sequence=['#fdae61'])
+                st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("sunlight_hours"))
                 st.caption(f"🤖 {agri_tip('sunlight')}")
 
-            # 🌱 NDVI Index
+            # NDVI Chart
             st.markdown("### 🌿 NDVI Index Over Time")
-            fig7 = px.line(df_live, x='time_str', y='NDVI_index',
-                           markers=True, title="🌿 NDVI Index Trend",
-                           line_shape="linear", color_discrete_sequence=['green'])
-            st.plotly_chart(fig7, use_container_width=True)
+            fig = px.line(df_live, x='time_str', y='NDVI_index', title="🌿 NDVI Index", markers=True,
+                          color_discrete_sequence=['green'])
+            st.plotly_chart(fig, use_container_width=True)
             st.info(recommend_insight("NDVI_index"))
             st.caption(f"🤖 {agri_tip('NDVI index')}")
 
-            # 🕸️ Radar Chart
-            st.markdown("### 🕸️ Latest Sensor Snapshot (Radar Chart)")
+            # Radar Chart Snapshot
+            st.markdown("### 🕸️ Latest Sensor Snapshot")
             latest = df_live.iloc[-1]
             radar_df = pd.DataFrame({
-                'Metric': ['Soil Moisture', 'Soil pH', 'Temperature', 'Rainfall',
-                           'Humidity', 'Sunlight', 'NDVI'],
+                'Metric': ['Soil Moisture', 'Soil pH', 'Temperature', 'Rainfall', 'Humidity', 'Sunlight', 'NDVI'],
                 'Value': [
                     latest['soil_moisture_%'],
                     latest['soil_pH'],
@@ -595,26 +581,26 @@ elif section == "📊 Dashboard":
                     latest['NDVI_index']
                 ]
             })
-
-            fig_radar = go.Figure()
-            fig_radar.add_trace(go.Scatterpolar(
+            fig = go.Figure()
+            fig.add_trace(go.Scatterpolar(
                 r=radar_df['Value'],
                 theta=radar_df['Metric'],
                 fill='toself',
-                name='Latest Reading',
                 line=dict(color='teal')
             ))
-            fig_radar.update_layout(
+            fig.update_layout(
                 polar=dict(radialaxis=dict(visible=True, range=[0, max(radar_df['Value']) + 10])),
                 showlegend=False,
                 height=450
             )
-            st.plotly_chart(fig_radar, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)
 
+            # Reset refresh flag
             st.session_state['refresh_dashboard'] = False
 
         except Exception as e:
             st.error(f"❌ Unable to load dashboard data: {e}")
+
 
 
 

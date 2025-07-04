@@ -31,7 +31,7 @@ def get_base64_image(image_path, version=2):  # version to break cache
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()
 
-img_path = "appbackground11.jpg"  # <-- UPDATE THIS
+img_path = "backgroundimagenew.jpg"  # <-- UPDATE THIS
 img_base64 = get_base64_image(img_path, version=2)
 
 

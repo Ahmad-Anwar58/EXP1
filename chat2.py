@@ -44,10 +44,11 @@ def setup_retrieval_qa(db):
     )
     return chain
 
-# ✅ Smart query function to get short response
+# ✅ Smart query function to get short response from RetrievalQA
 def smart_query(chain, prompt):
     try:
-        result = chain.run(prompt)
-        return result.strip()
+        result = chain({'query': prompt})
+        return result['result'].strip()
     except Exception as e:
         return f"🤖 Error: {str(e)}"
+

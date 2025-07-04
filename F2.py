@@ -510,13 +510,15 @@ elif section == "📊 Dashboard":
                 fig = px.line(df_live, x='time_str', y='soil_moisture_%', title='💧 Soil Moisture Over Time', markers=True)
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("soil_moisture_%"))
-                st.caption(f"🤖 {agri_tip('soil moisture')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('soil moisture')}</div>", unsafe_allow_html=True)
+
 
             with col2:
                 fig = px.area(df_live, x='time_str', y='soil_pH', title='🧪 Soil pH Over Time', color_discrete_sequence=['#66c2a5'])
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("soil_pH"))
-                st.caption(f"🤖 {agri_tip('soil pH')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('soil_pH')}</div>", unsafe_allow_html=True)
+
 
             # Row 2: Temperature & Rainfall
             col3, col4 = st.columns(2)
@@ -525,7 +527,7 @@ elif section == "📊 Dashboard":
                              color='temperature_C', color_continuous_scale='thermal')
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("temperature_C"))
-                st.caption(f"🤖 {agri_tip('temperature')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('temperature_C')}</div>", unsafe_allow_html=True)
 
             with col4:
                 fig = go.Figure(data=[go.Candlestick(
@@ -540,7 +542,7 @@ elif section == "📊 Dashboard":
                 fig.update_layout(title="☔ Rainfall Fluctuation", height=350)
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("rainfall_mm"))
-                st.caption(f"🤖 {agri_tip('rainfall')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('rainfall_mm')}</div>", unsafe_allow_html=True)
 
             # Row 3: Humidity & Sunlight
             col5, col6 = st.columns(2)
@@ -549,14 +551,14 @@ elif section == "📊 Dashboard":
                               markers=True, line_shape='spline', color_discrete_sequence=['orange'])
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("humidity_%"))
-                st.caption(f"🤖 {agri_tip('humidity')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('humidity_%')}</div>", unsafe_allow_html=True)
 
             with col6:
                 fig = px.area(df_live, x='time_str', y='sunlight_hours', title='☀️ Sunlight Hours Over Time',
                               color_discrete_sequence=['#fdae61'])
                 st.plotly_chart(fig, use_container_width=True)
                 st.info(recommend_insight("sunlight_hours"))
-                st.caption(f"🤖 {agri_tip('sunlight')}")
+                st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('sunlight_hours')}</div>", unsafe_allow_html=True)
 
             # NDVI Chart
             st.markdown("### 🌿 NDVI Index Over Time")
@@ -564,7 +566,7 @@ elif section == "📊 Dashboard":
                           color_discrete_sequence=['green'])
             st.plotly_chart(fig, use_container_width=True)
             st.info(recommend_insight("NDVI_index"))
-            st.caption(f"🤖 {agri_tip('NDVI index')}")
+            st.markdown(f"<div style='color:black; font-weight:bold;'>🤖 {agri_tip('NDVI_index')}</div>", unsafe_allow_html=True)
 
             # Radar Chart Snapshot
             st.markdown("### 🕸️ Latest Sensor Snapshot")
